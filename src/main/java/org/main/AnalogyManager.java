@@ -89,7 +89,7 @@ public class AnalogyManager {
 
         }while(currentPredicate != null);
 
-        flatAbstractString.append(")".repeat(depth));
+        flatAbstractString.append(")".repeat(predicate.getPredicatesEmbedded() + 1));
 
         return flatAbstractString.toString();
     }

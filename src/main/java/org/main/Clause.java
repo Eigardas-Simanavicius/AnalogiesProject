@@ -42,4 +42,12 @@ public class Clause implements Predicate {
     public void increaseEmbedded(){
         return;
     }
+
+    public int getPredicatesEmbedded(){
+        if( embedded == null){
+            return 0;
+        }else{
+            return embedded.getPredicatesEmbedded() + 1;
+        }
+    }
 }
