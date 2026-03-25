@@ -40,7 +40,7 @@ public class Clause implements Predicate {
     }
 
     public void increaseEmbedded(){
-        return;
+        predicatesEmbedded++;
     }
 
     public int getPredicatesEmbedded(){
