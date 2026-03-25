@@ -19,6 +19,7 @@ public class AnalogyManager {
                     if (words.size() > 1) {
                         curr.setSubject(words.getLast());
                     }
+                    words.clear();
                     curr.setEmbedded(next);
                 }
                 curr = next;
