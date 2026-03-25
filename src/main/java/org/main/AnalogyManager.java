@@ -77,7 +77,6 @@ public class AnalogyManager {
 
         if (predicate == null) return "";
 
-        int depth = 0;
         int subject = 0;
         do{
             flatAbstractString.append("(");
@@ -94,12 +93,44 @@ public class AnalogyManager {
                 flatAbstractString.append(" ");
             }
 
-            depth += 1;
-
         }while(currentPredicate != null);
 
         flatAbstractString.append(")".repeat(predicate.getPredicatesEmbedded() + 1));
 
         return flatAbstractString.toString();
+    }
+
+    public static String convertToIndentedAbstractString(Predicate predicate){
+        StringBuilder indentedAbstractString = new StringBuilder();
+        Predicate currentPredicate = predicate;
+
+        if (predicate == null) return "";
+
+        int subject = 0;
+        int greatestDepth = currentPredicate.getPredicatesEmbedded();
+        do{
+            indentedAbstractString.append("\t".repeat(greatestDepth - currentPredicate.getPredicatesEmbedded()));
+            indentedAbstractString.append("(");
+            indentedAbstractString.append(currentPredicate.getName());
+
+            if(currentPredicate.getSubject() != null && !currentPredicate.getSubject().isBlank()){
+                indentedAbstractString.append(" ");
+                indentedAbstractString.append(subject++);
+            }
+
+            currentPredicate = currentPredicate.getEmbedded();
+
+            if(currentPredicate != null && currentPredicate.getEmbedded() != null){
+                indentedAbstractString.append("\n");
+            }else if (currentPredicate != null && currentPredicate.getEmbedded() == null){
+                greatestDepth = 0;
+                indentedAbstractString.append(" ");
+            }
+
+        }while(currentPredicate != null);
+
+        indentedAbstractString.append(")".repeat(predicate.getPredicatesEmbedded() + 1));
+
+        return indentedAbstractString.toString();
     }
 }
