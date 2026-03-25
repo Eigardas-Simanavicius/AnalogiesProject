@@ -11,4 +11,6 @@ public interface Predicate {
     public void setName(String name);
     public String getName();
     public void increaseEmbedded();
+    public int getPredicatesEmbedded();
 }
+
