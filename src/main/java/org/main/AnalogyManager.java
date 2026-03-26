@@ -2,8 +2,6 @@ package org.main;
 
 import org.main.Interfaces.Predicate;
 
-import java.util.Arrays;
-
 
 public class AnalogyManager {
 
@@ -42,7 +40,7 @@ public class AnalogyManager {
         return head;
     }
 
-    public static String ConvertToString(Predicate predicate){
+    public static String ConvertToString(Predicate predicate, Boolean prettify){
         StringBuilder output = new StringBuilder();
         Predicate current = predicate;
         int counter = 0;
@@ -50,13 +48,15 @@ public class AnalogyManager {
             output.append("(").append(current.getName());
             if(current.getSubject() != null){
                 output.append(" ").append(current.getSubject());
+                if(prettify && current.getEmbedded() != null) {
+                    output.append("\n");
+                    output.repeat("\t", counter+1);
+                }
             }
             counter++;
             current = current.getEmbedded();
         }
-        for(int i = 0; i < counter; i++){
-            output.append(")");
-        }
+        output.repeat(")", counter);
 
         return output.toString();
     }

@@ -13,7 +13,7 @@ public class Main {
         c2.setEmbedded(c3);
         c3.setEmbedded(c4);
 
-        System.out.println(AnalogyManager.ConvertToString(c1));
+        System.out.println(AnalogyManager.ConvertToString(c1, true));
         System.out.println(AnalogyManager.convertToIndentedAbstractString(c1));
         // System.out.println(AnalogyManager.ConvertToString(c1));
 
