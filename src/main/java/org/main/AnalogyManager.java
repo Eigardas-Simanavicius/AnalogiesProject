@@ -124,6 +124,36 @@ public class AnalogyManager {
         return stringBuilder.toString();
     }
 
+    public static String convertToPrettifiedAbstractString(Predicate predicate){
+        HashMap<String,Integer> abstractionMapping = getAbstractionMappings(predicate);
+
+        return convertToPrettifiedAbstractStringHelper(predicate,abstractionMapping);
+    }
+
+    private static String convertToPrettifiedAbstractStringHelper(Predicate predicate, HashMap<String,Integer> abstractionMapping){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("\t".repeat(predicate.depth()));
+
+        stringBuilder.append("(");
+
+        stringBuilder.append(predicate.getName());
+
+        if(predicate.getSubject() != null){
+            stringBuilder.append(" ");
+            stringBuilder.append(abstractionMapping.get(predicate.getSubject()));
+        }
+
+        for(Predicate child : predicate.getChildren()){
+            stringBuilder.append("\n");
+            stringBuilder.append(convertToFlatAbstractStringHelper(child,abstractionMapping));
+        }
+
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
+    }
+
     private static HashMap<String,Integer> getAbstractionMappings(Predicate predicate){
         HashMap<String,Integer> abstractionMapping = new HashMap<>();
         int currentMapping = 0;
