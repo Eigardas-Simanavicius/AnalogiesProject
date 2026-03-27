@@ -2,9 +2,11 @@ package org.main;
 
 import org.main.Interfaces.Predicate;
 
+import java.util.ArrayList;
+
 public class Clause implements Predicate {
-    Predicate embedded = null;
-    Predicate head = null;
+    ArrayList<Predicate> children = new ArrayList<Predicate>();
+    Predicate parent = null;
     int predicatesEmbedded = 0;
     String subject;
     String name;
@@ -17,7 +19,7 @@ public class Clause implements Predicate {
     }
 
     public void setEmbedded(Predicate predicate){
-        this.embedded = predicate;
+        //this.embedded = predicate;
     }
 
     public Predicate getEmbedded(){
@@ -83,14 +85,19 @@ public class Clause implements Predicate {
         if(predicatesEmbedded > 0){
             return predicatesEmbedded;
         }else{
-           return head.getPredicatesCount();
+           //return head.getPredicatesCount();
         }
+        return 0;
     }
 
-    public Predicate getHead(){
-        return head;
+    public void addChild(Predicate child){
+        children.add(child);
     }
-    public void setHead(Predicate head){
-        this.head = head;
+    public ArrayList<Predicate> getChildren(){return children;}
+    public Predicate getParent(){
+        return parent;
+    }
+    public void setParent(Predicate head){
+        this.parent = head;
     }
 }

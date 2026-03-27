@@ -13,15 +13,13 @@ public class Main {
         c2.setEmbedded(c3);
         c3.setEmbedded(c4);
 
-        System.out.println(AnalogyManager.ConvertToString(c1, true));
-        System.out.println(AnalogyManager.convertToIndentedAbstractString(c1));
+        //System.out.println(AnalogyManager.ConvertToString(c1, true));
+        //System.out.println(AnalogyManager.convertToIndentedAbstractString(c1));
         // System.out.println(AnalogyManager.ConvertToString(c1));
 
-        String input = "(work in scientist (some lab (that (conduct experiment))))";
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship))))";
         Clause c5 = (Clause) AnalogyManager.ConvertToOOP(input);
-        System.out.println(c5.getName() + " which has " + c5.getSubject() + " and  " +c5.getEmbedded().getName());
-        //System.out.println(AnalogyManager.ConvertToString(c5));
-        System.out.println(c5.get(2).length() + " and " + c5.length());
+        System.out.println(c5.getName() + " and " + c5.getSubject());
 
 
 

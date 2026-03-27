@@ -2,42 +2,41 @@ package org.main;
 
 import org.main.Interfaces.Predicate;
 
+import java.util.ArrayList;
+
 
 public class AnalogyManager {
-
+    //In essence , Open bracket, down the tree, closed bracket means we go back up the tree
     public static Predicate ConvertToOOP(String analogy){
-        char[] chars  = analogy.toCharArray();
-        String[] words = analogy.replace(")","").split("\\(");
+        String[] words = (analogy.split("\\("));
+        char[] brackets = analogy.replaceAll("[^()]","").toCharArray();
         String[] currWords;
-        Predicate head ,curr , next ;
+        Predicate curr = null, next ;
         int count = 1;
-
-        head = new Clause();
-        curr = head;
-        currWords = words[count].split(" ");
-        head.setName(findName(currWords));
-        head.setSubject(currWords[currWords.length-1]);
-        head.increaseEmbedded();
-        count++;
-        curr.setHead(head);
-
-        for (int i = 1; i < chars.length; i++) {
-            if (chars[i] == '(') {
-                currWords = words[count].split(" ");
+        for(int i = 0; i < brackets.length; i++){
+            if(brackets[i] == '('){
                 next = new Clause();
-                next.setName(findName(currWords));
-                if(currWords.length > 1) {
-                    next.setSubject(currWords[currWords.length - 1]);
+                if(curr != null){
+                    next.setParent(curr);
+                    curr.addChild(next);
                 }
-                curr.setEmbedded(next);
                 curr = next;
-                head.increaseEmbedded();
-                curr.setHead(head);
-                count++;
-            }
-        }
 
-        return head;
+                currWords = words[count].split(" ");
+
+                curr.setName(findName(currWords));
+                count++;
+                if(currWords.length > 1){
+                    curr.setSubject(currWords[currWords.length-1]);
+                }
+
+            } else if (brackets[i] == ')') {
+                assert curr != null; // this should literally never happen
+                curr = curr.getParent();
+            }
+
+        }
+        return curr;
     }
 
     public static String ConvertToString(Predicate predicate, Boolean prettify){
@@ -62,6 +61,7 @@ public class AnalogyManager {
     }
 
     private static String findName(String[] str){
+
         if(str.length ==  1){
             return str[0];
         }

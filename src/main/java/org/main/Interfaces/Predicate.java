@@ -15,7 +15,8 @@ public interface Predicate {
     public int getPredicatesCount();
     public Predicate get(int i );
     public int length();
-    public Predicate getHead();
-    public void setHead(Predicate head);
+    public Predicate getParent();
+    public void setParent(Predicate head);
+    public void addChild(Predicate child);
 }
 
