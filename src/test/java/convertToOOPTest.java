@@ -18,19 +18,19 @@ public class convertToOOPTest {
     ArrayList<String> names = new ArrayList<>();
     @Test
     public void BasicTest() {
-        assertEquals("serve ", Head.getName());
-        assertEquals("some ",Head.getChildren().getFirst().getName());
+        assertEquals("serve", Head.getName());
+        assertEquals("some",Head.getChildren().getFirst().getName());
     }
 
     @Test
     public void AssertChildren(){
-        names.add("serve ");
-        names.add("some ");
-        names.add("that ");
-        names.add("perform ");
-        names.add("for ");
-        names.add("some ");
-        names.add("some ");
+        names.add("serve");
+        names.add("some");
+        names.add("that");
+        names.add("perform");
+        names.add("for");
+        names.add("some");
+        names.add("some");
 
         ArrayList<Predicate> children = Head.getAllChildren();
         for (int i = 0; i < children.size(); i++) {

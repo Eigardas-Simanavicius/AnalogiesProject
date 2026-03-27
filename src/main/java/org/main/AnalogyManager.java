@@ -27,8 +27,9 @@ public class AnalogyManager {
                 curr.setName(findName(currWords));
                 count++;
                 if(currWords.length > 1){
-                    curr.setSubject(currWords[currWords.length-1].replace("\\)",""));
+                    curr.setSubject(currWords[currWords.length-1].replace(")",""));
                 }
+
 
             } else {
                 if (brackets[i] == ')') {
@@ -85,14 +86,16 @@ public class AnalogyManager {
     private static String findName(String[] str){
 
         if(str.length ==  1){
-            return str[0].concat(" ");
+            return str[0];
         }
-        String str2 = "";
-        for (int i = 0; i < str.length - 1; i++) {
-           str2 = str2.concat(str[i]);
-           str2 = str2.concat(" ");
+        StringBuilder str2 = new StringBuilder("");
+        for (int i = 0; i < (str.length - 1); i++) {
+           str2.append(str[i]);
+           if(i != str.length-2){
+               str2.append(" ");
+           }
         }
-        return str2;
+        return str2.toString();
     }
 
     public static String convertToFlatAbstractString(Predicate predicate){

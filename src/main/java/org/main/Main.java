@@ -25,10 +25,10 @@ public class Main {
         c4.addEmbedded(c7);
         c5.addEmbedded(c6);
 
-        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        String input = "(serve and priest (some congregation (that (perform (for (some god)) (some worship)))))";
         ArrayList<Predicate> children =  AnalogyManager.ConvertToOOP(input).getAllChildren();
         for(Predicate pred:children){
-            System.out.println(pred.getName() + " " + pred.getSubject());
+            System.out.println(pred.getName() + ":" + pred.getSubject());
         }
 
         /*
