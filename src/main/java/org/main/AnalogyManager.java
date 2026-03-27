@@ -27,15 +27,20 @@ public class AnalogyManager {
                 curr.setName(findName(currWords));
                 count++;
                 if(currWords.length > 1){
-                    curr.setSubject(currWords[currWords.length-1]);
+                    curr.setSubject(currWords[currWords.length-1].replace("\\)",""));
                 }
 
-            } else if (brackets[i] == ')') {
-                assert curr != null; // this should literally never happen
-                curr = curr.getParent();
+            } else {
+                if (brackets[i] == ')') {
+                    assert curr != null;
+                    if (curr.getParent() != null) {
+                        curr = curr.getParent();
+                    }
+                }
             }
 
         }
+
         return curr;
     }
 
@@ -80,12 +85,12 @@ public class AnalogyManager {
     private static String findName(String[] str){
 
         if(str.length ==  1){
-            return str[0];
+            return str[0].concat(" ");
         }
         String str2 = "";
         for (int i = 0; i < str.length - 1; i++) {
-            str2 = str2.concat(" ");
            str2 = str2.concat(str[i]);
+           str2 = str2.concat(" ");
         }
         return str2;
     }

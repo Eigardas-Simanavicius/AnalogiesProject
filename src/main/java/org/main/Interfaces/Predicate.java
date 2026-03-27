@@ -16,8 +16,6 @@ public interface Predicate {
     public void increaseEmbedded();
     public int getPredicatesEmbedded();
     public int getPredicatesCount();
-    public Predicate get(int i );
-    public int length();
     public Predicate getParent();
     public void setParent(Predicate head);
     public void addChild(Predicate child);

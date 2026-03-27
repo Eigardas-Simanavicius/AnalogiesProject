@@ -1,5 +1,9 @@
 package org.main;
 
+import org.main.Interfaces.Predicate;
+
+import java.util.ArrayList;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -21,10 +25,15 @@ public class Main {
         c4.addEmbedded(c7);
         c5.addEmbedded(c6);
 
-        System.out.println(AnalogyManager.ConvertToString(c1, true));
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        ArrayList<Predicate> children =  AnalogyManager.ConvertToOOP(input).getAllChildren();
+        for(Predicate pred:children){
+            System.out.println(pred.getName() + " " + pred.getSubject());
+        }
 
         /*
         System.out.println(AnalogyManager.convertToIndentedAbstractString(c1));
+        System.out.println(AnalogyManager.ConvertToString(c1, true));
         // System.out.println(AnalogyManager.ConvertToString(c1));
 
         String input = "(work in scientist (some lab (that (conduct experiment))))";

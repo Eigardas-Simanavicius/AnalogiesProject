@@ -53,9 +53,6 @@ public class Clause implements Predicate {
     public void increaseEmbedded(){
         predicatesEmbedded++;
     }
-    // TODO
-    // both of these cant exist, I dont want to touch the second one rn since it breaks your funcs
-    // -Eigardas
 
     public int getPredicatesCount(){
         return predicatesEmbedded;
@@ -67,35 +64,6 @@ public class Clause implements Predicate {
         }else{
             return embedded.getFirst().getPredicatesEmbedded() + 1;
         }
-    }
-
-    public Predicate get(int i) {
-        try {
-            if(i > predicatesEmbedded){
-                throw new IndexOutOfBoundsException("Failed To get");
-            }else {
-                Clause curr = this;
-                for (int j = 0; j < i; j++) {
-                    if (curr.getChildren() != null) {
-                        curr = (Clause) curr.getChildren().getFirst();
-                    }
-                }
-
-                return curr;
-            }
-        } catch (Exception e) {
-            System.out.println("Clause get failed");
-            throw new RuntimeException(e);
-        }
-    }
-
-    public int length() {
-        if(predicatesEmbedded > 0){
-            return predicatesEmbedded;
-        }else{
-           //return head.getPredicatesCount();
-        }
-        return 0;
     }
 
     public void addChild(Predicate child){
