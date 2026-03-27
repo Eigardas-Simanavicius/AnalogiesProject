@@ -37,4 +37,9 @@ public class convertToOOPTest {
             assertEquals(children.get(i).getName(),names.get(i));
         }
     }
+
+    @Test
+    public void ParentTest() {
+        assertEquals(Head, Head.getChildren().getFirst().getParent());
+    }
 }
