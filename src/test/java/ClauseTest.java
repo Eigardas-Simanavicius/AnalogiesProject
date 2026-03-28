@@ -44,4 +44,36 @@ public class ClauseTest {
             assertEquals(children.get(i).getName(),names.get(i));
         }
     }
+
+    @Test
+    public void depth(){
+        Clause c1 = new Clause("c1","c1");
+        Clause c2 = new Clause("c2","c2");
+        Clause c3 = new Clause("c3","c3");
+        Clause c4 = new Clause("c4","c4");
+        Clause c5 = new Clause("c5","c5");
+
+        c1.addEmbedded(c2);
+        c2.addEmbedded(c3);
+        c2.addEmbedded(c4);
+        c3.addEmbedded(c5);
+
+        assertEquals(5, c5.depth());
+    }
+
+    @Test
+    public void getParent(){
+        Clause c1 = new Clause("c1","c1");
+        Clause c2 = new Clause("c2","c2");
+        Clause c3 = new Clause("c3","c3");
+        Clause c4 = new Clause("c4","c4");
+        Clause c5 = new Clause("c5","c5");
+
+        c1.addEmbedded(c2);
+        c2.addEmbedded(c3);
+        c2.addEmbedded(c4);
+        c3.addEmbedded(c5);
+
+        assertEquals(c3, c5.getParent());
+    }
 }

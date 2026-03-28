@@ -18,6 +18,10 @@ public class Clause implements Predicate{
         this.subject = subject;
     }
 
+    public Clause(String name){
+        this.name = name;
+    }
+
     @Override
     public void addEmbedded(Predicate predicate){
         predicate.setParent(this);

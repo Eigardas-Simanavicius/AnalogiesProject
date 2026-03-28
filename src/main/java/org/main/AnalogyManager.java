@@ -50,9 +50,13 @@ public class AnalogyManager {
         StringBuilder output = new StringBuilder();
         ArrayList<Predicate> clauseList = predicate.getAllChildren();
         int endParenthesesCounter = 0;
+        int tabulationFixer = 0;
         for(int i = 0; i < clauseList.size(); i++){
             Predicate current = clauseList.get(i);
-            output.append("(").append(current.getName());
+            output.append("(");
+            if(current.getName() != null){
+                output.append(current.getName());
+            }
             if(current.getSubject() != null){
                 output.append(" ").append(current.getSubject());
 
@@ -68,10 +72,12 @@ public class AnalogyManager {
                         }
                         output.repeat(")",counter);
                         endParenthesesCounter -= counter;
+                        tabulationFixer = counter-1;
                     }
                     if(prettify) {
                         output.append("\n");
-                        output.repeat("\t", i+1);
+                        output.repeat("\t", i+1-tabulationFixer);
+                        tabulationFixer = 0;
                     }
                 }
 
