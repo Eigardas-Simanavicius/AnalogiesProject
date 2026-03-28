@@ -33,6 +33,9 @@ public class Main {
 
         System.out.println(AnalogyManager.ConvertToString(c1, true));
         // System.out.println(AnalogyManager.ConvertToString(c1));
+
+        System.out.println(AnalogyManager.convertToPrettifiedAbstractString(AnalogyManager.ConvertToOOP("(if (can (cause.0 *AIDS (some death (when crushing (crush something))))) (can (succeed_at *AIDS (crush something))))")));
+
 /*
         String input = "(work in scientist (some lab (that (conduct experiment))))";
         Clause c5 = (Clause) AnalogyManager.ConvertToOOP(input);

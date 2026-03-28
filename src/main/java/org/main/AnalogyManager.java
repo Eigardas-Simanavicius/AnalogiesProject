@@ -164,7 +164,7 @@ public class AnalogyManager {
 
         for(Predicate child : predicate.getChildren()){
             stringBuilder.append("\n");
-            stringBuilder.append(convertToFlatAbstractStringHelper(child,abstractionMapping));
+            stringBuilder.append(convertToPrettifiedAbstractStringHelper(child,abstractionMapping));
         }
 
         stringBuilder.append(")");
