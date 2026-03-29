@@ -27,7 +27,7 @@ public class convertToFlatAbstractStringTest {
     }
 
     @Test
-    public void BasicTest(){
+    public void BasicTest() throws IllegalAccessException {
         Predicate p = AnalogyManager.ConvertToOOP(input);
         assertEquals(output,AnalogyManager.convertToFlatAbstractString(p));
     }

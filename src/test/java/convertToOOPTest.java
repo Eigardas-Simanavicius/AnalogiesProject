@@ -9,22 +9,26 @@ import org.main.Interfaces.Predicate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.Assert.*;
 
 public class convertToOOPTest {
 
-    String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
-    Clause Head = (Clause) AnalogyManager.ConvertToOOP(input);
+
     ArrayList<String> names = new ArrayList<>();
     @Test
-    public void BasicTest() {
+    public void BasicTest() throws IllegalAccessException {
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        Clause Head = (Clause) AnalogyManager.ConvertToOOP(input);
+
         assertEquals("serve", Head.getName());
         assertEquals("some",Head.getChildren().getFirst().getName());
     }
 
     @Test
-    public void AssertChildren(){
+    public void AssertChildren() throws IllegalAccessException {
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        Clause Head = (Clause) AnalogyManager.ConvertToOOP(input);
         names.add("serve");
         names.add("some");
         names.add("that");
@@ -40,13 +44,32 @@ public class convertToOOPTest {
     }
 
     @Test
-    public void ParentTest() {
+    public void ParentTest() throws IllegalAccessException {
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        Clause Head = (Clause) AnalogyManager.ConvertToOOP(input);
         assertEquals(Head, Head.getChildren().getFirst().getParent());
     }
 
     @Test
-    public void nullSubjectTest(){
-        Head = (Clause) AnalogyManager.ConvertToOOP("(One (Two 2)" );
+    public void nullSubjectTest() throws IllegalAccessException {
+        String input = "(serve priest (some congregation (that (perform (for (some god)) (some worship)))))";
+        Clause Head = (Clause) AnalogyManager.ConvertToOOP(input);
+        Head = (Clause) AnalogyManager.ConvertToOOP("(One (Two 2))" );
         assertNull(Head.getSubject());
     }
+    @Test
+    public void unbalancedBrackets(){
+        String input = "(((((((((serve priest (some congregation (that (perform (for (some god)) (some worship))))";
+        String input2 = "(((((((((serve priest (some congregation (that (perform (for (some god)) (some worship))))))))))))";
+        assertThrows(IllegalArgumentException.class, () -> {AnalogyManager.ConvertToOOP(input);});
+        assertThrows(IllegalArgumentException.class, () -> {AnalogyManager.ConvertToOOP(input2);});
+    }
+
+    @Test
+    public void emptyInput(){
+        String input = "";
+        assertThrows(IllegalArgumentException.class, () -> {AnalogyManager.ConvertToOOP(input);});
+    }
+
+
 }

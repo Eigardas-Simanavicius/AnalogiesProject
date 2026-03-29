@@ -4,49 +4,68 @@ import org.main.Interfaces.Predicate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 
 
 public class AnalogyManager {
     //In essence , Open bracket, down the tree, closed bracket means we go back up the tree
-    public static Predicate ConvertToOOP(String analogy){
+    public static Predicate ConvertToOOP(String analogy) throws IllegalAccessException {
         String[] words = (analogy.split("\\("));
         char[] brackets = analogy.replaceAll("[^()]","").toCharArray();
-        String[] currWords;
-        Predicate curr = null, next ;
-        int count = 1;
-        for(int i = 0; i < brackets.length; i++){
-            if(brackets[i] == '('){
-                next = new Clause();
-                if(curr != null){
-                    next.setParent(curr);
-                    curr.addEmbedded(next);
-                }
-                curr = next;
-
-                currWords = words[count].split(" ");
-
-                curr.setName(findName(currWords));
-                count++;
-                if(currWords.length > 1){
-                    curr.setSubject(currWords[currWords.length-1].replace(")",""));
-                }else {
-                    curr.setSubject(null);
-                }
-
-
-            } else {
-                if (brackets[i] == ')') {
-                    assert curr != null;
-                    if (curr.getParent() != null) {
-                        curr = curr.getParent();
-                    }
-                }
+        try {
+            if (analogy.replaceAll("[^(]", "").length() != analogy.replaceAll("[^)]", "").length()) {
+                throw new IllegalArgumentException("Brackets Dont match");
             }
+                String[] currWords;
+                Predicate curr = null, next;
+                int count = 1;
+                for (int i = 0; i < brackets.length; i++) {
+                    if (brackets[i] == '(') {
+                        next = new Clause();
+                        if (curr != null) {
+                            next.setParent(curr);
+                            curr.addEmbedded(next);
+                        }
+                        curr = next;
+                        currWords = words[count].replace(")", "").split(" ");
+                        if(currWords.length == 0){
+                            throw new InputMismatchException("Null input");
+                        }else{
+                            for (String word:currWords){
+                                System.out.println("here" + word);
+                            }
+                        }
 
+                        curr.setName(findName(currWords));
+                        count++;
+                        if (currWords.length > 1) {
+                            curr.setSubject(currWords[currWords.length - 1].replace(")", ""));
+                        } else {
+                            curr.setSubject(null);
+                        }
+
+
+                    } else {
+                        if (brackets[i] == ')') {
+                            assert curr != null;
+                            if (curr.getParent() != null) {
+                                curr = curr.getParent();
+                            }
+                        }
+                    }
+
+                }
+
+                return curr;
+
+        }catch (Exception e){
+            if(e.equals(new IllegalArgumentException())){
+                throw e;
+            }else if (e.equals(new InputMismatchException()))
+                System.out.println("The input is empty nothign will be thrown");
+                return null;
+            }
         }
-
-        return curr;
-    }
 
     public static String ConvertToString(Predicate predicate, Boolean prettify){
         StringBuilder output = new StringBuilder();
@@ -191,3 +210,4 @@ public class AnalogyManager {
         return abstractionMapping;
     }
 }
+
