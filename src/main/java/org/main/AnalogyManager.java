@@ -30,12 +30,7 @@ public class AnalogyManager {
                     currWords = words[count].split(" ");
 
                     if (Objects.equals(currWords[0], ")")) {
-                        System.out.println("we are here");
                         throw new InputMismatchException("Null input");
-                    } else {
-                        for (String word : currWords) {
-                            System.out.println("here" + word);
-                        }
                     }
 
                     curr.setName(findName(currWords));

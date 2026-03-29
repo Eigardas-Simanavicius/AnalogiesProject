@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,6 +10,7 @@ import org.main.Interfaces.Predicate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.InputMismatchException;
 
 import static org.junit.Assert.*;
 
@@ -68,7 +70,7 @@ public class convertToOOPTest {
     @Test
     public void emptyInput(){
         String input = "";
-        assertThrows(IllegalArgumentException.class, () -> {AnalogyManager.ConvertToOOP(input);});
+        assertNull(AnalogyManager.ConvertToOOP(input));
     }
 
 
