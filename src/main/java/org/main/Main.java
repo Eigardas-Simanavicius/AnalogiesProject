@@ -23,6 +23,14 @@ public class Main {
         c4.addEmbedded(c7);
         c5.addEmbedded(c6);
 
+        String input = "(One (two )";
+        ArrayList<Predicate> children =  AnalogyManager.ConvertToOOP(input).getAllChildren();
+        for(Predicate pred:children){
+            System.out.println(pred.getName() + ":" + pred.getSubject());
+        }
+
+        //System.out.println(AnalogyManager.ConvertToString(c1, true));
+        // System.out.println(AnalogyManager.ConvertToString(c1));
 
         String input = "()";
         AnalogyManager.ConvertToOOP(input);
