@@ -2,70 +2,102 @@ package org.main;
 
 import org.main.Interfaces.Predicate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
+import java.util.*;
 
 
 public class AnalogyManager {
     //In essence , Open bracket, down the tree, closed bracket means we go back up the tree
-    public static Predicate ConvertToOOP(String analogy) throws IllegalAccessException {
+    public static Predicate ConvertToOOP(String analogy) throws IllegalArgumentException {
         String[] words = (analogy.split("\\("));
-        char[] brackets = analogy.replaceAll("[^()]","").toCharArray();
+        char[] brackets = analogy.replaceAll("[^()]", "").toCharArray();
         try {
-            if (analogy.replaceAll("[^(]", "").length() != analogy.replaceAll("[^)]", "").length()) {
+
+            if (!bracketMatch(brackets)) {
                 throw new IllegalArgumentException("Brackets Dont match");
             }
-                String[] currWords;
-                Predicate curr = null, next;
-                int count = 1;
-                for (int i = 0; i < brackets.length; i++) {
-                    if (brackets[i] == '(') {
-                        next = new Clause();
-                        if (curr != null) {
-                            next.setParent(curr);
-                            curr.addEmbedded(next);
-                        }
-                        curr = next;
-                        currWords = words[count].replace(")", "").split(" ");
-                        if(currWords.length == 0){
-                            throw new InputMismatchException("Null input");
-                        }else{
-                            for (String word:currWords){
-                                System.out.println("here" + word);
-                            }
-                        }
+            String[] currWords;
+            Predicate curr = null, next;
+            int count = 1;
 
-                        curr.setName(findName(currWords));
-                        count++;
-                        if (currWords.length > 1) {
-                            curr.setSubject(currWords[currWords.length - 1].replace(")", ""));
-                        } else {
-                            curr.setSubject(null);
-                        }
+            for (int i = 0; i < brackets.length; i++) {
+                if (brackets[i] == '(') {
+                    next = new Clause();
+                    if (curr != null) {
+                        next.setParent(curr);
+                        curr.addEmbedded(next);
+                    }
+                    curr = next;
+                    currWords = words[count].split(" ");
 
-
+                    if (Objects.equals(currWords[0], ")")) {
+                        System.out.println("we are here");
+                        throw new InputMismatchException("Null input");
                     } else {
-                        if (brackets[i] == ')') {
-                            assert curr != null;
-                            if (curr.getParent() != null) {
-                                curr = curr.getParent();
-                            }
+                        for (String word : currWords) {
+                            System.out.println("here" + word);
                         }
                     }
 
+                    curr.setName(findName(currWords));
+                    count++;
+                    if (currWords.length > 1) {
+                        curr.setSubject(currWords[currWords.length - 1].replace(")", ""));
+                    } else {
+                        curr.setSubject(null);
+                    }
+
+
+                } else {
+                    if (brackets[i] == ')') {
+                        assert curr != null;
+                        if (curr.getParent() != null) {
+                            curr = curr.getParent();
+                        }
+                    }
                 }
 
-                return curr;
+            }
 
-        }catch (Exception e){
-            if(e.equals(new IllegalArgumentException())){
+            return curr;
+
+        } catch (Exception e) {
+            if (e instanceof InputMismatchException) {
+                System.out.println("Null Input, Returned Clause will be null");
+            }else{
                 throw e;
-            }else if (e.equals(new InputMismatchException()))
-                System.out.println("The input is empty nothign will be thrown");
-                return null;
             }
         }
+        return null;
+    }
+
+    private static boolean bracketMatch(char[] brackets){
+        Stack<Character> stack = new Stack<>();
+        for (char bracket:brackets){
+            if(bracket == '('){stack.push(bracket);
+            } else if (bracket == ')' ) {
+                if(stack.empty()){
+                    return false;
+                }
+              stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    private static String findName(String[] str){
+
+        if(str.length ==  1){
+            return str[0];
+        }
+        StringBuilder str2 = new StringBuilder("");
+        for (int i = 0; i < (str.length - 1); i++) {
+            str2.append(str[i]);
+            if(i != str.length-2){
+                str2.append(" ");
+            }
+        }
+        return str2.toString();
+    }
 
     public static String ConvertToString(Predicate predicate, Boolean prettify){
         StringBuilder output = new StringBuilder();
@@ -111,20 +143,6 @@ public class AnalogyManager {
         return output.toString();
     }
 
-    private static String findName(String[] str){
-
-        if(str.length ==  1){
-            return str[0];
-        }
-        StringBuilder str2 = new StringBuilder("");
-        for (int i = 0; i < (str.length - 1); i++) {
-           str2.append(str[i]);
-           if(i != str.length-2){
-               str2.append(" ");
-           }
-        }
-        return str2.toString();
-    }
 
     public static String convertToFlatAbstractString(Predicate predicate){
         HashMap<String,Integer> abstractionMapping = getAbstractionMappings(predicate);

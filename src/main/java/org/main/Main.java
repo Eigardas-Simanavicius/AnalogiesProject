@@ -5,7 +5,7 @@ import org.main.Interfaces.Predicate;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) throws IllegalAccessException {
+    public static void main(String[] args) throws IllegalArgumentException {
         Clause c1 = new Clause("serve", "priest");
         Clause c2 = new Clause("some", "congregation");
         Clause c3 = new Clause();
@@ -23,17 +23,10 @@ public class Main {
         c4.addEmbedded(c7);
         c5.addEmbedded(c6);
 
-        String input = "(One (two )";
-        ArrayList<Predicate> children =  AnalogyManager.ConvertToOOP(input).getAllChildren();
-        for(Predicate pred:children){
-            System.out.println(pred.getName() + ":" + pred.getSubject());
-        }
 
-        //System.out.println(AnalogyManager.ConvertToString(c1, true));
-        // System.out.println(AnalogyManager.ConvertToString(c1));
 
-        String input = "()";
-        AnalogyManager.ConvertToOOP(input);
 
+        String input = ")(()()())())()))))())";
+        System.out.println(AnalogyManager.ConvertToOOP(input));
     }
 }
