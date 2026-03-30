@@ -21,7 +21,8 @@ public class AnalogyManager {
 
             for (int i = 0; i < brackets.length; i++) {
                 if (brackets[i] == '(') {
-                    next = new Clause();
+                    next = new Clause("test");
+                    Subject test = new Subject("test");
                     if (curr != null) {
                         next.setParent(curr);
                         curr.addEmbedded(next);
