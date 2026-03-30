@@ -2,11 +2,11 @@ package org.main.Interfaces;
 
 
 public interface AnalogicalObject {
-    String toString();
     AnalogicalObject fromString(String stringRepresentation);
+    String toString();
     Predicate getParent();
     void setParent(Predicate parent);
-    int getDepth();
-    void setName(String name);
     String getName();
+    void setName(String name);
+    int getDepth();
 }
