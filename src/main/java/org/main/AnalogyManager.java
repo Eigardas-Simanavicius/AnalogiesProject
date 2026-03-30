@@ -126,88 +126,59 @@ public class AnalogyManager {
     }
 
 
-    public static String convertToFlatAbstractString(Predicate predicate){
-        HashMap<String,Integer> abstractionMapping = getAbstractionMappings(predicate);
-
-        return convertToFlatAbstractStringHelper(predicate,abstractionMapping);
-    }
-
-    private static String convertToFlatAbstractStringHelper(Predicate predicate, HashMap<String, Integer> abstractionMapping){
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("(");
-
-        stringBuilder.append(predicate.getName().trim());
-
-        if(predicate.getSubject() != null){
-            stringBuilder.append(" ");
-            if(predicate.getSubject().contains("*")){
-                stringBuilder.append("*");
-            }else{
-                stringBuilder.append(abstractionMapping.get(predicate.getSubject().trim()));
-            }
-        }
-
-        for(Predicate child : predicate.getChildren()){
-            stringBuilder.append(" ");
-            stringBuilder.append(convertToFlatAbstractStringHelper(child,abstractionMapping));
-        }
-
-        stringBuilder.append(")");
-
-        return stringBuilder.toString();
-    }
-
-    public static String convertToPrettifiedAbstractString(Predicate predicate){
-        HashMap<String,Integer> abstractionMapping = getAbstractionMappings(predicate);
-
-        return convertToPrettifiedAbstractStringHelper(predicate,abstractionMapping);
-    }
-
-    private static String convertToPrettifiedAbstractStringHelper(Predicate predicate, HashMap<String,Integer> abstractionMapping){
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("\t".repeat(predicate.depth()));
-
-        stringBuilder.append("(");
-
-        stringBuilder.append(predicate.getName().trim());
-
-        if(predicate.getSubject() != null){
-            stringBuilder.append(" ");
-            if(predicate.getSubject().contains("*")){
-                stringBuilder.append("*");
-            }else{
-                stringBuilder.append(abstractionMapping.get(predicate.getSubject().trim()));
-            }
-
-        }
-
-        for(Predicate child : predicate.getChildren()){
-            stringBuilder.append("\n");
-            stringBuilder.append(convertToPrettifiedAbstractStringHelper(child,abstractionMapping));
-        }
-
-        stringBuilder.append(")");
-
-        return stringBuilder.toString();
-    }
-
-    private static HashMap<String,Integer> getAbstractionMappings(Predicate predicate){
+    public static String convertToAbstractString(Predicate analogicalObject, Boolean prettified){
         HashMap<String,Integer> abstractionMapping = new HashMap<>();
-        int currentMapping = 0;
 
-        if(predicate.getSubject() != null && !predicate.getSubject().contains("*") ){
-            abstractionMapping.put(predicate.getSubject().trim(),currentMapping++);
-        }
+        StringBuilder stringBuilder = new StringBuilder();
 
-        for(Predicate child : predicate.getAllChildren()){
-            if(child.getSubject() != null && !child.getSubject().contains("*")  && !abstractionMapping.containsKey(child.getSubject().trim())){
-                abstractionMapping.put(child.getSubject().trim(), currentMapping++);
+        int mappingsCount = 0;
+
+        for(AnalogicalObject child : analogicalObject.getAllChildrenPostOrder()){
+            if(child instanceof Predicate){
+                stringBuilder.insert(0," ");
+                stringBuilder.insert(0, ((Predicate)child).getName());
+                stringBuilder.insert(0,"(");
+                stringBuilder.append(")");
+            }else{
+                if(child.getName().contains("*")){
+                    stringBuilder.append(" *");
+                }else if(!abstractionMapping.containsKey(child.getName())){
+                    abstractionMapping.put(child.getName(),mappingsCount++);
+                }
+
+                stringBuilder.append(" ");
+                stringBuilder.append(abstractionMapping.get(child.getName()));
             }
         }
 
-        return abstractionMapping;
+        if(prettified){
+            return prettify(stringBuilder.toString());
+        }else{
+            return stringBuilder.toString();
+        }
+
+
+    }
+
+    private static String prettify(String input){
+        StringBuilder prettifiedStringBuilder =new StringBuilder(input);
+
+        int depth = 0;
+
+        for(int curr = 1; curr < prettifiedStringBuilder.length(); curr++){
+            if(prettifiedStringBuilder.charAt(curr) == '('){
+
+                prettifiedStringBuilder.insert(curr++,"\n");
+                prettifiedStringBuilder.insert(curr,"\t".repeat(++depth));
+
+                curr += depth;
+            }else if(prettifiedStringBuilder.charAt(curr) == ')'){
+                prettifiedStringBuilder.insert(++curr,"\n");
+                depth--;
+            }
+        }
+
+        return prettifiedStringBuilder.toString();
     }
 }
 
