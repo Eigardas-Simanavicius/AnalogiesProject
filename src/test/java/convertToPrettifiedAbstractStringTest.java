@@ -29,6 +29,6 @@ public class convertToPrettifiedAbstractStringTest {
     @Test
     public void BasicTest() throws IllegalAccessException {
         Predicate p = AnalogyManager.ConvertToOOP(input);
-        assertEquals(output,AnalogyManager.convertToPrettifiedAbstractString(p));
+        assertEquals(output,AnalogyManager.convertToAbstractString(p,true));
     }
 }
