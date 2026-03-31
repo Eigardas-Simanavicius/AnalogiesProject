@@ -66,9 +66,12 @@ public class AnalogyManager {
 
     private static Predicate predicateBuilder(Predicate parent,String[] currWords){
         Predicate next = new Clause(currWords[0]);
-        AnalogicalObject subject;
+        Subject subject;
         for (int i = 1; i < currWords.length; i++) {
             subject = new Subject(currWords[i]);
+            if(currWords[i].toCharArray()[0] == '*'){
+                subject.setHasAsterisk();
+            }
             subject.setParent(next);
             next.addEmbedded(subject);
         }

@@ -70,4 +70,10 @@ public class MappingManager {
             return null;
         }
     }
+
+    public static void printMapping(HashMap<Subject,Subject> mapping){
+        for (Subject s: mapping.keySet() ){
+            System.out.println("key: " + s.getName() + " value: " + mapping.get(s).getName());
+        }
+    }
 }

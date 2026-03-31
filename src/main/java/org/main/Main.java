@@ -4,6 +4,7 @@ import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Main {
@@ -30,5 +31,7 @@ public class Main {
 
 
         System.out.println(MappingManager.canMap(h,h2));
+        HashMap<Subject,Subject> mapping = MappingManager.mapAnalogies(h,h2);
+        MappingManager.printMapping(mapping);
     }
 }

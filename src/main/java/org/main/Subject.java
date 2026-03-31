@@ -60,5 +60,8 @@ public class Subject implements AnalogicalObject {
     public boolean isHasAsterisk(){
         return hasAsterisk;
     }
+    public void setHasAsterisk(){
+        hasAsterisk = true;
+    }
 }
 
