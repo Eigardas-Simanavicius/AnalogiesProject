@@ -7,21 +7,22 @@ import java.util.Iterator;
 
 public class MappingManager {
     public static Boolean canMap(Predicate head1, Predicate head2){
+
         Iterator<AnalogicalObject> struct1 = ((Clause) head1).getPreOrderIterator();
-        Iterator<AnalogicalObject> struct2 = ((Clause) head1).getPreOrderIterator();
+        Iterator<AnalogicalObject> struct2 = ((Clause) head2).getPreOrderIterator();
+        AnalogicalObject curr1 = null;
+        AnalogicalObject curr2 = null;
 
         while (struct1.hasNext()){
-            AnalogicalObject curr1 = struct1.next();
-            AnalogicalObject curr2 = struct2.next();
-            System.out.println(curr1.getName() + " " + curr2.getName());
-            System.out.println(curr1.getClass() + " " + curr2.getClass());
-            // this does not look create right now, will fix later
+            curr1 = struct1.next();
+            curr2 = struct2.next();
+            
             if(isClause(curr1) && isClause(curr2)){
-                if(!(((Clause) curr1).getName().equals(((Clause) curr2).getName()))){
+                if(!(sameNames((Clause) curr1,(Clause) curr2))){
                     return false;
                 }
             }else if(isSubject(curr1) && isSubject(curr2)){
-                if((((Subject) curr1).isHasAsterisk() && ((Subject) curr2).isHasAsterisk())){
+                if(bothHaveAsterisks((Subject) curr1, (Subject) curr2)){
                   return false;
                 }
             }else{
@@ -37,6 +38,14 @@ public class MappingManager {
 
     private static boolean isSubject(AnalogicalObject subject){
         return  subject.getClass().getName().equals(Subject.class.getName());
+    }
+
+    private static boolean bothHaveAsterisks(Subject a,Subject b){
+        return a.isHasAsterisk() && b.isHasAsterisk();
+    }
+
+    private static boolean sameNames(Clause a,Clause b){
+        return (a).getName().equals((b).getName());
     }
 
 }
