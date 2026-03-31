@@ -8,6 +8,7 @@ import java.security.InvalidParameterException;
 public class Subject implements AnalogicalObject {
     private Predicate parent;
     private String name;
+    private boolean hasAsterisk;
 
     public Subject(String name){
         this.name = name;
@@ -54,6 +55,10 @@ public class Subject implements AnalogicalObject {
         }else{
             return parent.getDepth() + 1;
         }
+    }
+
+    public boolean isHasAsterisk(){
+        return hasAsterisk;
     }
 }
 

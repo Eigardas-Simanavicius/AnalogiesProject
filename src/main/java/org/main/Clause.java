@@ -85,7 +85,7 @@ public class Clause implements Predicate{
         return new PreOrderAnalogicalObjectIterator(this);
     }
 
-    private class PreOrderAnalogicalObjectIterator implements Iterator<AnalogicalObject>{
+    private static class PreOrderAnalogicalObjectIterator implements Iterator<AnalogicalObject>{
         Stack<AnalogicalObject>  stack;
 
         public PreOrderAnalogicalObjectIterator(AnalogicalObject analogicalObject){
@@ -103,7 +103,7 @@ public class Clause implements Predicate{
             AnalogicalObject next = stack.pop();
 
             if(next instanceof Predicate){
-                stack.addAll(((Predicate) next).getChildren());
+                stack.addAll(((Predicate) next).getChildren().reversed());
             }
 
             return next;

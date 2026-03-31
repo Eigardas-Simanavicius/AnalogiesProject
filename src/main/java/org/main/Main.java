@@ -1,8 +1,10 @@
 package org.main;
 
+import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) throws IllegalArgumentException {
@@ -15,6 +17,18 @@ public class Main {
 
 
         System.out.println("Converting to OOP and then back to String");
-        System.out.println(AnalogyManager.ConvertToString(AnalogyManager.ConvertToOOP("(work in scientist (some lab (that (conduct experiment))))"),true));
+        //System.out.println(AnalogyManager.ConvertToString(AnalogyManager.ConvertToOOP("(work in scientist (some lab (that (conduct experiment))))"),true));
+
+        Clause h = (Clause) AnalogyManager.ConvertToOOP("(1 2 (3 4 (5 (6 (7 (8 9)) (10 11)))))");
+        Clause h2 = (Clause) AnalogyManager.ConvertToOOP("(1 2 (3 d (5 (6 (7 (8 i)) (10 k)))))");
+        Iterator<AnalogicalObject> it = h.getPreOrderIterator();
+        while (it.hasNext()){
+            String n = it.next().getName();
+            System.out.println(n);
+        }
+        System.out.println("\n");
+
+
+        System.out.println(MappingManager.canMap(h,h2));
     }
 }
