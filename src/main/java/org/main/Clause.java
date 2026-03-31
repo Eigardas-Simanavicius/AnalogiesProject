@@ -3,7 +3,6 @@ package org.main;
 import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -19,11 +18,75 @@ public class Clause implements Predicate{
         this.name = name;
     }
 
+
+
+    public String toString(){
+        return toStringHelper(false);
+    }
+
+    public String toIndentedString(){
+        return toStringHelper(true);
+    }
+
+    private String toStringHelper(boolean prettify){
+        if(parent != null){
+            throw new UnsupportedOperationException("You cannot call toString() on a child Predicate. toString must be called on the root Predicate");
+        }
+        StringBuilder output = new StringBuilder();
+        ArrayList<Predicate> clauseList = getAllChildren();
+        int endParenthesesCounter = 0;
+        int tabulationFixer = 0;
+        for(int i = 0; i < clauseList.size(); i++){
+            Predicate current = clauseList.get(i);
+            ArrayList<AnalogicalObject> currentChildren = current.getChildren();
+            output.append("(");
+            if(current.getName() != null){
+                output.append(current.getName());
+            }
+
+            boolean hasSubjects = false;
+            if(!currentChildren.isEmpty()){
+                for(AnalogicalObject child : currentChildren){
+                    if(child instanceof Subject){
+                        output.append(" ").append(child.getName());
+                        hasSubjects = true;
+                    }
+                }
+            }
+            if(hasSubjects){
+                //Assuming that parantheses only need to be closed if the predicate has a subject
+                if(i != clauseList.size() -1){
+                    Predicate next = clauseList.get(i+1);
+                    if(next.getParent() != current){
+                        int counter = 1;
+                        Predicate possibleParent = current.getParent();
+                        while(next.getParent() != possibleParent){
+                            possibleParent = possibleParent.getParent();
+                            counter++;
+                        }
+                        output.repeat(")",counter);
+                        endParenthesesCounter -= counter;
+                        tabulationFixer = counter-1;
+                    }
+                    if(prettify) {
+                        output.append("\n");
+                        output.repeat("\t", i+1-tabulationFixer);
+                        tabulationFixer = 0;
+                    }
+                }
+            }
+            endParenthesesCounter++;
+        }
+
+        output.repeat(")", endParenthesesCounter);
+        return output.toString();
+    }
+
     @Override
-    public void addEmbedded(AnalogicalObject predicate){
-        if(!predicate.equals(this)) {
-            predicate.setParent(this);
-            this.children.add(predicate);
+    public void addEmbedded(AnalogicalObject embed){
+        if(!embed.equals(this)) {
+            embed.setParent(this);
+            children.add(embed);
         }
         else{
             System.out.println("You cannot embed a predicate in itself.");
@@ -31,8 +94,8 @@ public class Clause implements Predicate{
     }
 
     @Override
-    public ArrayList<AnalogicalObject> getAllChildren(){
-        ArrayList<AnalogicalObject> output = new ArrayList<>();
+    public ArrayList<Predicate> getAllChildren(){
+        ArrayList<Predicate> output = new ArrayList<>();
         output.add(this);
         if(!children.isEmpty()) {
             for (AnalogicalObject child : children) {
