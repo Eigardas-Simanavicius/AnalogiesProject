@@ -4,6 +4,7 @@ import org.main.Clause;
 import org.main.MappingManager;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CanMapTest {
 
@@ -171,6 +172,22 @@ public class CanMapTest {
         assertEquals(false, MappingManager.canMap(c1,c2));
         assertEquals(false, MappingManager.canMap(c2,c1));
 
+    }
+
+    @Test
+    public void asteriskSubjectMatching(){
+        Clause c1 = (Clause)AnalogyManager.ConvertToOOP("(predicate1 *subject1(predicate2 subject4(p3 s5)))");
+        Clause c2 = (Clause)AnalogyManager.ConvertToOOP("(predicate1 *subject2(predicate2 subject3(p3 s6)))");
+
+        assertTrue(MappingManager.canMap(c1,c2));
+    }
+
+    @Test
+    public void asteriskSubjectNonMatching(){
+        Clause c1 = (Clause)AnalogyManager.ConvertToOOP("(predicate1 subject1(predicate2 subject4(p3 s5)))");
+        Clause c2 = (Clause)AnalogyManager.ConvertToOOP("(predicate1 *subject2(predicate2 subject3(p3 s6)))");
+
+        assertEquals(false, MappingManager.canMap(c1,c2));
     }
 
     @Test

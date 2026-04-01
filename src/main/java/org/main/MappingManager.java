@@ -3,10 +3,8 @@ package org.main;
 import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.TreeMap;
 
 public class MappingManager {
     public static Boolean canMap(Predicate head1, Predicate head2){
@@ -32,7 +30,7 @@ public class MappingManager {
                     return false;
                 }
             }else if(isSubject(curr1) && isSubject(curr2)){
-                if(bothHaveAsterisks((Subject) curr1, (Subject) curr2)){
+                if(!asterisksMatch((Subject) curr1, (Subject) curr2)){
                   return false;
                 }
             }else{
@@ -50,8 +48,8 @@ public class MappingManager {
         return  subject.getClass().equals(Subject.class);
     }
 
-    private static boolean bothHaveAsterisks(Subject a,Subject b){
-        return a.isHasAsterisk() && b.isHasAsterisk();
+    private static boolean asterisksMatch(Subject a, Subject b){
+        return a.isHasAsterisk() == b.isHasAsterisk();
     }
 
     private static boolean sameNames(Clause a,Clause b){
