@@ -3,7 +3,6 @@ package org.main;
 import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
-import java.security.InvalidParameterException;
 import java.util.*;
 
 
@@ -83,12 +82,12 @@ public class AnalogyManager {
         return next;
     }
 
-    // Returns Null if source and target structures are different
+    // Returns Null if source and target cannot be mapped
     public static HashMap<String,String> flatStringMapping(String source, String target){
         HashMap<String,String> mapping = new HashMap<>();
 
-        AbstractMap.SimpleEntry<String,Integer> sourceStringPositionPair;
-        AbstractMap.SimpleEntry<String,Integer> targetStringPositionPair;
+        Map.Entry<String,Integer> sourceStringPositionPair;
+        Map.Entry<String,Integer> targetStringPositionPair;
 
         int sourceCursor = 0;
         int targetCursor = 0;
@@ -103,45 +102,43 @@ public class AnalogyManager {
 
         int depth = 1;
 
-        while(depth > 0 || sourceCursor > source.length() || targetCursor > target.length()){
-            while (source.charAt(sourceCursor) == ' ') sourceCursor++;
-            while (target.charAt(targetCursor) == ' ') targetCursor++;
+        while(depth > 0 && sourceCursor < source.length() && targetCursor < target.length()){
+            while (sourceCursor < source.length() && source.charAt(sourceCursor) == ' ') sourceCursor++;
+            while (targetCursor < target.length() && target.charAt(targetCursor) == ' ') targetCursor++;
 
-            if(predicateCheck) { // Parses relations in predicate
+            if(sourceCursor >= source.length() || targetCursor >= target.length()) {
+                return null;
+            }else if(predicateCheck) { // Parses relations in predicate
 
-                sourceStringPositionPair = constructStringFromPosition(source,sourceCursor);
-                targetStringPositionPair = constructStringFromPosition(target,targetCursor);
+                sourceStringPositionPair = readToken(source,sourceCursor);
+                targetStringPositionPair = readToken(target,targetCursor);
 
-                if(sourceStringPositionPair == null) throw new InvalidParameterException("Source string presented has incorrect structure");
-                if(targetStringPositionPair == null) throw new InvalidParameterException("Target string presented has incorrect structure");
+                if(sourceStringPositionPair == null || targetStringPositionPair == null) return null;
 
                 sourceCursor = sourceStringPositionPair.getValue();
                 targetCursor = targetStringPositionPair.getValue();
 
-                if(sourceStringPositionPair.getKey().compareTo(targetStringPositionPair.getKey()) != 0) return null;
+                if(!sourceStringPositionPair.getKey().equals(targetStringPositionPair.getKey())) return null;
 
                 predicateCheck = false;
-            }else if(source.charAt(sourceCursor) == ')' || target.charAt(targetCursor) == ')'){ // Step Out of predicate
-                if(source.charAt(sourceCursor++) != ')' || target.charAt(targetCursor++) != ')') {
-                    return null;
-                }
+            }else if(source.charAt(sourceCursor) == ')' && target.charAt(targetCursor) == ')'){ // Step Out of predicate
+                sourceCursor++;
+                targetCursor++;
                 depth--;
-                if(depth < 0){
-                    throw new InvalidParameterException("Source string presented has incorrect structure");
-                }
-            }else if(source.charAt(sourceCursor) == '(' || target.charAt(targetCursor) == '(') { // Step into predicate
-                if (source.charAt(sourceCursor++) != '(' || target.charAt(targetCursor++) != '(') {
-                    return null;
-                }
+            }else if(source.charAt(sourceCursor) == ')' || target.charAt(targetCursor) == ')') { // Mismatched closing brackets
+                return null;
+            } else if(source.charAt(sourceCursor) == '(' && target.charAt(targetCursor) == '(') { // Step into predicate
+                sourceCursor++;
+                targetCursor++;
                 predicateCheck = true;
                 depth++;
+            }else if(source.charAt(sourceCursor) == '(' || target.charAt(targetCursor) == '(') { // Mismatched opening brackets
+                return null;
+            } else{ // Compare non predicates
+                sourceStringPositionPair = readToken(source,sourceCursor);
+                targetStringPositionPair = readToken(target,targetCursor);
 
-            }else{ // Compare non predicates
-                sourceStringPositionPair = constructStringFromPosition(source,sourceCursor);
-                targetStringPositionPair = constructStringFromPosition(target,targetCursor);
-
-                if(sourceStringPositionPair == null) throw new InvalidParameterException("Source string presented has incorrect structure");
-                if(targetStringPositionPair == null) throw new InvalidParameterException("Target string presented has incorrect structure");
+                if(sourceStringPositionPair == null || targetStringPositionPair == null) return null;
 
                 sourceCursor = sourceStringPositionPair.getValue();
                 targetCursor = targetStringPositionPair.getValue();
@@ -151,7 +148,10 @@ public class AnalogyManager {
 
         }
 
-        if(depth != 0) {
+        while (sourceCursor < source.length() && source.charAt(sourceCursor) == ' ') sourceCursor++;
+        while (targetCursor < target.length() && target.charAt(targetCursor) == ' ') targetCursor++;
+
+        if(depth != 0 || sourceCursor != source.length() || targetCursor != target.length()) {
             return null;
         }else {
             return mapping;
@@ -159,16 +159,20 @@ public class AnalogyManager {
     }
 
     // Is helper function for flatStringMapping method. Do not use elsewhere
-    private static AbstractMap.SimpleEntry<String,Integer> constructStringFromPosition(String string,int position){
+    private static Map.Entry<String,Integer> readToken(String string, int position){
         StringBuilder stringBuilder = new StringBuilder();
+
+        if (string.length() <= position) return null;
+
         while (string.charAt(position) != ' ' && string.charAt(position) != '(' && string.charAt(position) != ')') {
-
-            if (string.length() < position) return null;
-
             stringBuilder.append(string.charAt(position++));
-
         }
-        return  new AbstractMap.SimpleEntry<>(stringBuilder.toString(),position);
+
+        if(stringBuilder.isEmpty()){
+            return null;
+        }else {
+            return Map.entry(stringBuilder.toString(), position);
+        }
     }
 
     public static String convertToAbstractString(Predicate analogicalObject, Boolean prettified){
