@@ -10,6 +10,10 @@ import java.util.TreeMap;
 
 public class MappingManager {
     public static Boolean canMap(Predicate head1, Predicate head2){
+        if(head1 == null || head2 == null){
+            System.out.println("One of the input predicates is null, cannot attempt mapping.");
+            return false;
+        }
 
         Iterator<AnalogicalObject> struct1 = ((Clause) head1).getPreOrderIterator();
         Iterator<AnalogicalObject> struct2 = ((Clause) head2).getPreOrderIterator();
@@ -17,6 +21,9 @@ public class MappingManager {
         AnalogicalObject curr2 = null;
 
         while (struct1.hasNext()){
+            if(!struct2.hasNext()){
+                return false;
+            }
             curr1 = struct1.next();
             curr2 = struct2.next();
 
@@ -32,15 +39,15 @@ public class MappingManager {
                 return false;
             }
         }
-        return true;
+        return !struct2.hasNext();
     }
 
     private static boolean isClause(AnalogicalObject clause){
-        return  clause.getClass().getName().equals(Clause.class.getName());
+        return  clause.getClass().equals(Clause.class);
     }
 
     private static boolean isSubject(AnalogicalObject subject){
-        return  subject.getClass().getName().equals(Subject.class.getName());
+        return  subject.getClass().equals(Subject.class);
     }
 
     private static boolean bothHaveAsterisks(Subject a,Subject b){

@@ -1,12 +1,7 @@
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
 import org.main.AnalogyManager;
 import org.main.Clause;
 import org.main.Interfaces.AnalogicalObject;
-import org.main.Interfaces.Predicate;
 
 import java.util.*;
 
