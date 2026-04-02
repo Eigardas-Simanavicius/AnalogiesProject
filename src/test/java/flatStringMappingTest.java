@@ -4,6 +4,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.main.AnalogyManager;
 import org.main.Interfaces.Predicate;
+import org.main.MappingManager;
 
 import java.util.*;
 
@@ -38,6 +39,6 @@ public class flatStringMappingTest {
 
     @Test
     public void UnmappableClauses() throws IllegalAccessException{
-        assertEquals(null, AnalogyManager.flatStringMapping(inputSource, "(work_out scientist (some lab (that (conducts experiments))))"));
+        assertEquals(null, MappingManager.flatStringMappingEigardasEdition(inputSource, "(work_out scientist (some lab (that (conducts experiments))))"));
     }
 }

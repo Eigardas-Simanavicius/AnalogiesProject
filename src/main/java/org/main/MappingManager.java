@@ -104,10 +104,13 @@ public class MappingManager {
         for(int i = 1; i < ((brackets1.length/2) + 1);i++){
             currwords = words1[i].split(" ");
             currwords2 = words2[i].split(" ");
-            if(currwords2.length != currwords.length){
+            if(currwords2.length != currwords.length || currwords.length < 1){
                 return null;
             }
-            for(int j = 0; j < currwords.length;j++){
+            if(!currwords[0].equals(currwords2[0])){
+                return null;
+            }
+            for(int j = 1; j < currwords.length;j++){
                 if(checkEquality(currwords[j],currwords2[j])){
                     mapping.put(currwords[j],currwords2[j]);
                 }else {
