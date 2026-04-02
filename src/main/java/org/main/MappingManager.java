@@ -3,6 +3,7 @@ package org.main;
 import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -80,5 +81,56 @@ public class MappingManager {
         for (Subject s: mapping.keySet() ){
             System.out.println("key: " + s.getName() + " value: " + mapping.get(s).getName());
         }
+    }
+
+
+    public static HashMap<String,String> flatStringMappingEigardasEdition(String s1, String s2){
+        HashMap<String,String> mapping = new HashMap<>();
+        String[] words1 = (s1.replace(")","").split("\\("));
+        char[] brackets1 = s1.replaceAll("[^()]", "").toCharArray();
+
+        String[] words2 = (s2.replace(")","").split("\\("));
+        char[] brackets2 = s2.replaceAll("[^()]", "").toCharArray();
+
+        String[] currwords;
+        String[] currwords2;
+
+
+        if(!bracketMatch(brackets1,brackets2)){
+            return null;
+        }
+
+        //Starts at 1 because split adds a blank string at first, and only half the brackets since we need to ignore closing brackets, and then +1 to compensate for the starting at 1
+        for(int i = 1; i < ((brackets1.length/2) + 1);i++){
+            currwords = words1[i].split(" ");
+            currwords2 = words2[i].split(" ");
+            if(currwords2.length != currwords.length){
+                return null;
+            }
+            for(int j = 0; j < currwords.length;j++){
+                if(checkEquality(currwords[j],currwords2[j])){
+                    mapping.put(currwords[j],currwords2[j]);
+                }else {
+                    return null;
+                }
+            }
+        }
+        return mapping;
+    }
+
+    private static boolean bracketMatch(char[] brackets1,char[] brackets2){
+        if(brackets1.length != brackets2.length){
+            return false;
+        }
+        for (int i = 0; i < brackets1.length; i++) {
+            if(brackets1[i] != brackets2[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    // right now this will only check asterisks, im sure there will be more conditions in the future
+    private static boolean checkEquality(String s1,String s2){
+        return (s1.toCharArray()[0] == '*') == (s2.toCharArray()[0] == '*');
     }
 }
