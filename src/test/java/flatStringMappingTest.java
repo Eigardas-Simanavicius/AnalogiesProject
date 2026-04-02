@@ -4,10 +4,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.main.AnalogyManager;
 import org.main.Interfaces.Predicate;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,5 +34,10 @@ public class flatStringMappingTest {
     @Test
     public void BasicTest() throws IllegalAccessException {
         assertEquals(output,AnalogyManager.flatStringMapping(inputSource,inputTarget));
+    }
+
+    @Test
+    public void UnmappableClauses() throws IllegalAccessException{
+        assertEquals(null, AnalogyManager.flatStringMapping(inputSource, "(work_out scientist (some lab (that (conducts experiments))))"));
     }
 }
