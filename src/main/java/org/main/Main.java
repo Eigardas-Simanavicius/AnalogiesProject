@@ -30,8 +30,10 @@ public class Main {
         System.out.println("\n");
 
 
-        System.out.println(MappingManager.canMap(h,h2));
-        HashMap<Subject,Subject> mapping = MappingManager.mapAnalogies(h,h2);
-        MappingManager.printMapping(mapping);
+
+       HashMap<String,String> map =  MappingManager.flatStringMappingEigardasEdition("(1 2 (3 *4 (5 (6 (7 (8 9)) (10 11)))))","(1 2 (3 *d (5 (6 (7 (8 i)) (10 k)))))");
+       for(String s: map.keySet()){
+           System.out.println("key: " + s + " value: " + map.get(s));
+       }
     }
 }
