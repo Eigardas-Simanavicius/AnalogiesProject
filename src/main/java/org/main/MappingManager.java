@@ -84,7 +84,11 @@ public class MappingManager {
     }
 
 
-    public static HashMap<String,String> flatStringMappingEigardasEdition(String s1, String s2){
+    public static HashMap<String,String> flatStringMapping(String s1, String s2){
+        if(s1 == null || s2 == null){
+            throw new IllegalArgumentException("Null inputs are not allowed");
+        }
+
         HashMap<String,String> mapping = new HashMap<>();
         String[] words1 = (s1.replace(")","").split("\\("));
         char[] brackets1 = s1.replaceAll("[^()]", "").toCharArray();
