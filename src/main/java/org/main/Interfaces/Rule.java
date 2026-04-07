@@ -9,7 +9,6 @@ public interface Rule {
     String getByArgument();
     String getNewArgument();
     Boolean newArgumentHasAsterisk();
-    ArrayList<String> getModifiers();
     Boolean hasModifiers();
 
 }
