@@ -6,14 +6,14 @@ import java.util.*;
 
 public class ReWriter {
 
+    // This takes an analogy and re-writes according to the provded rule set
     private static Predicate reWriteAnalogy(HashMap<String,rewriteRule> rulesMap, Predicate source)  {
-
         Predicate reWrite = AnalogyManager.ConvertToOOP(source.toString());
         Iterator<AnalogicalObject> it = ((Clause)reWrite).getPreOrderIterator();
         AnalogicalObject curr = null;
         Predicate replacement = null;
         Predicate head = null;
-
+        // essentially just check if we need to rewrite this predicate, and if we do we remove the old one and attach the rewritten one
         while (it.hasNext()){
             curr = it.next();
             if(curr.getClass().equals(Clause.class)){
@@ -35,10 +35,11 @@ public class ReWriter {
         return head;
     }
 
+    // this is the main controller function,
     public static ArrayList<Predicate> reWriteAnalogyAllPermuatations(ArrayList<rewriteRule> rules,Predicate source)  {
         removeNumbers((Clause) source);
-        // Linked hash maps ensure items are returned in order of insertion, very important here 
-        LinkedHashMap<String,ArrayList<rewriteRule>> rulesMap = mapRulesMany(rules);
+        // Linked hash maps ensure items are returned in order of insertion, very important here
+        LinkedHashMap<String,ArrayList<rewriteRule>> rulesMap = mapAllRules(rules);
         ArrayList<Predicate> permutations = new ArrayList<>();
         int[] maxCount = new int[rulesMap.size()];
         int[] currCount = new int[rulesMap.size()];
@@ -59,7 +60,8 @@ public class ReWriter {
         return permutations;
     }
 
-    private static LinkedHashMap<String,ArrayList<rewriteRule>> mapRulesMany(ArrayList<rewriteRule> rules){
+    // maps all rules to their respective predicate
+    private static LinkedHashMap<String,ArrayList<rewriteRule>> mapAllRules(ArrayList<rewriteRule> rules){
         LinkedHashMap<String,ArrayList<rewriteRule>> map = new LinkedHashMap<>();
         for(rewriteRule r: rules){
             if(!map.containsKey(r.getOriginalPredicate())) {
@@ -70,7 +72,8 @@ public class ReWriter {
         return map;
     }
 
-    private static HashMap<String,rewriteRule> mapRulesSingle(LinkedHashMap<String,ArrayList<rewriteRule>> rules, int[] count){
+    // this creates a map of rules based on the permutation from count
+    private static HashMap<String,rewriteRule> mapSingleRulePermutation(LinkedHashMap<String,ArrayList<rewriteRule>> rules, int[] count){
         HashMap<String,rewriteRule> map = new HashMap<>();
         Iterator<ArrayList<rewriteRule>> it = rules.values().iterator();
         Iterator<String> sIt = rules.keySet().iterator();
@@ -81,7 +84,11 @@ public class ReWriter {
         return map;
     }
 
-
+    // we can iterate through the permutations in a bit of a similar way you'd construct a bit table
+    // but instead of carrying the bit evertime we only do it when we hit maxcount, each value corresponding to one of the rewrite rules from the list
+    // If we have arraylists of size 2,2,3
+    // we will write them in the following way
+    // 0,0,0 -> 0,0,1 -> 0,0,2 -> 0,0,3 -> 0,1,0 .. etc etc , this way we create all permutations
     private static void updatePermutation(int[] currCount,int n,int[] maxCount){
         if(currCount[n] < maxCount[n]){
             currCount[n]++;
@@ -102,3 +109,5 @@ public class ReWriter {
     }
 
 }
+
+
