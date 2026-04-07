@@ -37,7 +37,6 @@ public class AnalogyManager {
                 }
 
             }
-
             return curr;
 
         } catch (Exception e) {

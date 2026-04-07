@@ -20,25 +20,21 @@ public class Main {
         System.out.println("Converting to OOP and then back to String");
         //System.out.println(AnalogyManager.ConvertToString(AnalogyManager.ConvertToOOP("(work in scientist (some lab (that (conduct experiment))))"),true));
 
-        Clause h = (Clause) AnalogyManager.ConvertToOOP("(1 2 (3 4 (5 (6 (7 (8 9)) (10 11)))))");
-        Clause h2 = (Clause) AnalogyManager.ConvertToOOP("(1 2 (3 d (5 (6 (7 (8 i)) (10 k)))))");
-        Iterator<AnalogicalObject> it = h.getPreOrderIterator();
-        while (it.hasNext()){
-            String n = it.next().getName();
-            System.out.println(n);
-        }
-        System.out.println("\n");
 
-
-
-       HashMap<String,String> map =  MappingManager.flatStringMapping("(1 2 (3 *4 (5 (6 (7 (8 9)) (10 11)))))","(1 2 (3 *d (5 (6 (7 (8 i)) (10 k)))))");
-       for(String s: map.keySet()){
-           System.out.println("key: " + s + " value: " + map.get(s));
-       }
 
        rewriteRule rule1 = new rewriteRule("exercise perform_of");
+       rewriteRule rule2 = new rewriteRule("explode destroy_of");
        rule1.testConstructor("exercise", "perform", "of", "exercising", null, "exercise", true);
-       Clause testClause = (Clause)AnalogyManager.ConvertToOOP("(exercise athelete muscle)");
-        System.out.println(((Clause)rule1.rewrite(testClause)).toIndentedString());
+       rule2.testConstructor("explode","destroy","of","exploding",null,"explode",true);
+       ArrayList<rewriteRule> rules = new ArrayList<>();
+       rules.add(rule1);
+       rules.add(rule2);
+       Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (exercise athelete muscle) (explode Gregs legs))");
+        Clause testClause = (Clause)AnalogyManager.ConvertToOOP("(exercise athelete muscle)");
+        //System.out.println(((Clause)rule1.rewrite(testClause)).toIndentedString());
+        //System.out.println((testClause2.toIndentedString()));
+        //System.out.println(((Clause) testClause2.reWriteAnalogy(rules)).toIndentedString());
+        Predicate ans = testClause2.reWriteAnalogy(rules);
+        System.out.println(((Clause) ans) + " :" + ans.getChildren().size());
     }
 }
