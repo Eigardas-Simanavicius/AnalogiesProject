@@ -5,8 +5,9 @@ import org.main.Interfaces.Predicate;
 import java.util.*;
 
 public class ReWriter {
-    public static Predicate reWriteAnalogy(HashMap<String,rewriteRule> rulesMap, Predicate source)  {
-        // I am going to make the assumption that each clause can atmost have one rewrite.
+
+    private static Predicate reWriteAnalogy(HashMap<String,rewriteRule> rulesMap, Predicate source)  {
+
         Predicate reWrite = AnalogyManager.ConvertToOOP(source.toString());
         Iterator<AnalogicalObject> it = ((Clause)reWrite).getPreOrderIterator();
         AnalogicalObject curr = null;
@@ -35,8 +36,8 @@ public class ReWriter {
     }
 
     public static ArrayList<Predicate> reWriteAnalogyAllPermuatations(ArrayList<rewriteRule> rules,Predicate source)  {
-        // I am going to make the assumption that each clause can atmost have one rewrite.
         removeNumbers((Clause) source);
+        // Linked hash maps ensure items are returned in order of insertion, very important here 
         LinkedHashMap<String,ArrayList<rewriteRule>> rulesMap = mapRulesMany(rules);
         ArrayList<Predicate> permutations = new ArrayList<>();
         int[] maxCount = new int[rulesMap.size()];
