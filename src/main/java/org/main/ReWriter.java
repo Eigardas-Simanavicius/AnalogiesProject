@@ -102,8 +102,9 @@ public class ReWriter {
         AnalogicalObject curr = null;
         while (it.hasNext()){
             curr = it.next();
-            if(curr.getName().contains(".0")){
-                curr.setName(curr.getName().replace(".0",""));
+            if(curr.getName().contains(".")){
+                String[] split = curr.getName().split("\\.");
+                curr.setName(split[0]);
             }
         }
     }
