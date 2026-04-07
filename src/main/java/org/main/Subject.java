@@ -15,15 +15,6 @@ public class Subject implements AnalogicalObject {
     }
 
     @Override
-    public AnalogicalObject fromString(String subject){
-        if(subject.contains("(") || subject.contains(")")){
-            throw new InvalidParameterException("Subject value cannot contain formating characters such as ')' or '('.");
-        }else{
-            return new Subject(subject);
-        }
-    }
-
-    @Override
     public String toString(){
         return name;
     }

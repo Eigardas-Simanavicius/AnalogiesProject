@@ -2,7 +2,6 @@ package org.main.Interfaces;
 
 
 public interface AnalogicalObject {
-    AnalogicalObject fromString(String stringRepresentation);
     String toString();
     Predicate getParent();
     void setParent(Predicate parent);

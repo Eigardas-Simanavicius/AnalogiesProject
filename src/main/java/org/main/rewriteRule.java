@@ -1,12 +1,8 @@
 package org.main;
-
-import com.sun.jdi.event.ClassUnloadEvent;
 import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 import org.main.Interfaces.Rule;
-
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,16 +12,15 @@ import java.util.List;
 //Hope this helps when writing a parser
 
 public class rewriteRule implements Rule {
-    private String originalRule;
     private String originalPredicate;
     private String verbPredicate;
     private String prepositionPredicate;
     private String byArgument;
     private String newArgument;
     private Boolean newArgumentHasAsterisk;
-    private Boolean negation = false;
-    private Boolean exponent = false;
-    private Boolean lessThan = false;
+    private Boolean negation;
+    private Boolean exponent;
+    private Boolean lessThan;
 
     public rewriteRule(String originalPredicate, String rule){
         // ^<!provide_to:benefactor*&denying
@@ -40,7 +35,7 @@ public class rewriteRule implements Rule {
             }
         }
 
-        verbPredicate = ruleSubParts.get(0);
+        verbPredicate = ruleSubParts.getFirst();
 
         negation = verbPredicate.contains("!");
         exponent = verbPredicate.contains("^");

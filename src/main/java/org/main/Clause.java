@@ -133,11 +133,6 @@ public class Clause implements Predicate{
     public ArrayList<AnalogicalObject> getChildren(){return children;}
 
     @Override
-    public AnalogicalObject fromString(String stringRepresentation) {
-        return null;
-    }
-
-    @Override
     public Predicate getParent(){
         return parent;
     }
