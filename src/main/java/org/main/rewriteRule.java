@@ -20,7 +20,9 @@ public class rewriteRule implements Rule {
     private String byArgument;
     private String newArgument;
     private Boolean newArgumentHasAsterisk;
-    private ArrayList<String> modifiers;
+    private Boolean negation;
+    private Boolean exponent;
+    private Boolean lessThan;
 
     public rewriteRule(String rule){
         this.originalRule = rule;
@@ -36,7 +38,7 @@ public class rewriteRule implements Rule {
 
     @Override
     public Boolean hasModifiers() {
-        return !modifiers.isEmpty();
+        return negation || exponent || lessThan;
     }
 
     @Override
@@ -47,11 +49,6 @@ public class rewriteRule implements Rule {
     @Override
     public Boolean newArgumentHasAsterisk() {
         return newArgumentHasAsterisk;
-    }
-
-    @Override
-    public ArrayList<String> getModifiers() {
-        return modifiers;
     }
 
     @Override
@@ -69,7 +66,6 @@ public class rewriteRule implements Rule {
         this.verbPredicate = verb;
         this.prepositionPredicate = preposition;
         this.byArgument = byArg;
-        this.modifiers = mods;
         this.newArgument = newArg;
         this.newArgumentHasAsterisk = newArgAsterisk;
     }
