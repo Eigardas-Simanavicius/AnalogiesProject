@@ -29,6 +29,10 @@ public class rewriteRule implements Rule {
 
         List<String> ruleSubParts = List.of(rule.split("[_:&]"));
 
+        if(ruleSubParts.size() != 4){
+            throw new InvalidParameterException("The rewrite rule given has an invalid structure.");
+        }
+
         for(String ruleSubPart : ruleSubParts){
             if(ruleSubPart.isBlank()){
                 throw new InvalidParameterException("The rewrite rule given has an invalid structure.");
