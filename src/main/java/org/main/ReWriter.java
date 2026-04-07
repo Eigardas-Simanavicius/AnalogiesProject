@@ -6,11 +6,12 @@ import java.util.*;
 
 public class ReWriter {
 
-    // This takes an analogy and re-writes according to the provded rule set
+    // This takes an analogy and re-writes according to the provided rule set
     private static Predicate reWriteAnalogy(HashMap<String,rewriteRule> rulesMap, Predicate source)  {
         Predicate reWrite = AnalogyManager.ConvertToOOP(source.toString());
         Iterator<AnalogicalObject> it = ((Clause)reWrite).getPreOrderIterator();
         AnalogicalObject curr = null;
+        ArrayList<AnalogicalObject> children = null;
         Predicate replacement = null;
         Predicate head = null;
         // essentially just check if we need to rewrite this predicate, and if we do we remove the old one and attach the rewritten one
@@ -21,9 +22,12 @@ public class ReWriter {
                 if(rulesMap.containsKey(curr.getName())){
                     Predicate parent = curr.getParent();
                     curr.setParent(null);
+                    children = ((Clause) curr).getClauseChildren();
+                    ((Clause) curr).removeClauses();
                     parent.getChildren().remove(curr);
                     replacement = rulesMap.get(curr.getName()).rewrite((Predicate) curr);
                     replacement.setParent(parent);
+                    replacement.addAllEmbedded(children);
                     parent.addEmbedded(replacement);
                 }
 
@@ -46,6 +50,7 @@ public class ReWriter {
         int permutationCount = 1;
         int n = 0;
 
+        // maxcount keeps track of how many rules are bound to each predicate, so we can correctly create permutations
         for (ArrayList<rewriteRule> arrs: rulesMap.values()) {
             permutationCount = permutationCount * arrs.size();
             maxCount[n] = arrs.size();
@@ -53,7 +58,7 @@ public class ReWriter {
         }
 
         for (int i = 0; i < permutationCount; i++) {
-            permutations.add(reWriteAnalogy(mapRulesSingle(rulesMap,currCount), AnalogyManager.ConvertToOOP(source.toString())));
+            permutations.add(reWriteAnalogy(mapSingleRulePermutation(rulesMap,currCount), AnalogyManager.ConvertToOOP(source.toString())));
             updatePermutation(currCount,currCount.length-1,maxCount);
         }
 

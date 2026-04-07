@@ -96,6 +96,14 @@ public class Clause implements Predicate{
     }
 
     @Override
+    public void  addAllEmbedded(ArrayList<AnalogicalObject> analogicalObjects){
+        for(AnalogicalObject object: analogicalObjects){
+            addEmbedded(object);
+        }
+    }
+
+
+    @Override
     public ArrayList<Predicate> getAllChildren(){
         ArrayList<Predicate> output = new ArrayList<>();
         output.add(this);
@@ -108,6 +116,8 @@ public class Clause implements Predicate{
         }
         return output;
     }
+
+
 
     @Override
     public void setName(String name){
@@ -145,7 +155,19 @@ public class Clause implements Predicate{
             return parent.getDepth() + 1;
         }
     }
+    public ArrayList<AnalogicalObject> getClauseChildren(){
+        ArrayList<AnalogicalObject> clauses = new ArrayList<>();
+        for (AnalogicalObject obj: this.getChildren()){
+            if(obj instanceof Clause){
+                clauses.add( obj);
+            }
+        }
+        return clauses;
+    }
 
+    public void removeClauses(){
+        this.getChildren().removeIf(obj -> obj instanceof Clause);
+    }
 
 
     public Iterator<AnalogicalObject> getPreOrderIterator(){
