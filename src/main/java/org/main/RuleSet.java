@@ -5,18 +5,21 @@ import java.util.*;
 
 public class RuleSet {
 
-    private final String ruleFileDir = "rewrite rules.txt";
-
     private static TreeMap<String, List<String>> rules;
     private TreeMap<String,List<rewriteRule>> parsedRules;
 
     public RuleSet(){
-        if(rules.isEmpty()){
+        if(rules == null){
+            rules = new TreeMap<>();
+            loadRulesFromFile();
+        }else if(rules.isEmpty()){
             loadRulesFromFile();
         }
+        parsedRules = new TreeMap<>();
     }
 
     private void loadRulesFromFile(){
+        String ruleFileDir = "rewrite rules.txt";
         Scanner scanner = new Scanner(ruleFileDir);
 
         for(String line : scanner.delimiter().split("\n")){
