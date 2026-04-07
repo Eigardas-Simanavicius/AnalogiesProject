@@ -6,10 +6,11 @@ import org.main.Interfaces.Predicate;
 import org.main.Interfaces.Rule;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
+
 //README!!
 //The written rule structure is as follows:
-// [original predicate]         [verbPredicate]_[prepositionPredicate]:[newArgument]{optional asterisk}&[byArgument]
+// [original predicate]         {modifiers}[verbPredicate]_[prepositionPredicate]:[newArgument]{optional asterisk}&[byArgument]
 //Hope this helps when writing a parser
 
 public class rewriteRule implements Rule {
@@ -20,9 +21,9 @@ public class rewriteRule implements Rule {
     private String byArgument;
     private String newArgument;
     private Boolean newArgumentHasAsterisk;
-    private Boolean negation;
-    private Boolean exponent;
-    private Boolean lessThan;
+    private Boolean negation = false;
+    private Boolean exponent = false;
+    private Boolean lessThan = false;
 
     public rewriteRule(String rule){
         this.originalRule = rule;
@@ -61,41 +62,65 @@ public class rewriteRule implements Rule {
         return prepositionPredicate;
     }
 
-    public void testConstructor(String origPred, String verb, String preposition, String byArg, ArrayList<String> mods, String newArg, Boolean newArgAsterisk){
+    public void testConstructor(String origPred, String verb, String preposition, String byArg, String modifier, String newArg, Boolean newArgAsterisk){
         this.originalPredicate = origPred;
         this.verbPredicate = verb;
         this.prepositionPredicate = preposition;
         this.byArgument = byArg;
         this.newArgument = newArg;
         this.newArgumentHasAsterisk = newArgAsterisk;
+        if(modifier != null) {
+            if (modifier.equals("!")) {
+                this.negation = true;
+            } else if (modifier.equals("^")) {
+                this.exponent = true;
+            } else if (modifier.equals("<")) {
+                this.lessThan = true;
+            }
+        }
     }
 
 
     public Predicate rewrite(Predicate source){
         validatePredicate(source);
-        //TODO:modifier processing goes here
 
         Clause output = new Clause("by");
         output.addEmbedded(new Subject(byArgument));
         Clause secondClause = new Clause(verbPredicate);
         AnalogicalObject firstArg = source.getChildren().get(0);
         AnalogicalObject secondArg = source.getChildren().get(1);
+        if(lessThan){
+            firstArg = source.getChildren().get(1);
+            secondArg = source.getChildren().get(0);
+        }
         Clause thirdClause = new Clause(prepositionPredicate);
-        secondClause.addEmbedded(firstArg);
 
         if(newArgumentHasAsterisk) {
+            secondClause.addEmbedded(firstArg);
             secondClause.addEmbedded(new Subject(newArgument));
             thirdClause.addEmbedded(secondArg);
         }
+        else if(exponent){
+            secondClause.addEmbedded(new Subject(newArgument));
+            secondClause.addEmbedded(firstArg);
+            thirdClause.addEmbedded(secondArg);
+        }
         else{
+            secondClause.addEmbedded(firstArg);
             secondClause.addEmbedded(secondArg);
             thirdClause.addEmbedded(new Subject(newArgument));
         }
 
+        if(negation){
+            Clause negateWrapper = new Clause("not");
+            output.addEmbedded(negateWrapper);
+            negateWrapper.addEmbedded(secondClause);
+        }
+        else{
+            output.addEmbedded(secondClause);
+        }
+
         secondClause.addEmbedded(thirdClause);
-        output.addEmbedded(secondClause);
-
-
         return output;
     }
 
@@ -103,13 +128,8 @@ public class rewriteRule implements Rule {
         if(!source.getName().equals(this.originalPredicate)){
             throw new IllegalArgumentException("Predicates do not match between rule and source");
         }
-        for(AnalogicalObject child : source.getChildren()){
-            if(!(child instanceof Subject)){
-                throw new IllegalArgumentException("Predicate has predicate children, processing undefined");
-            }
-        }
         if(source.getChildren().size() > 2){
-            throw new IllegalArgumentException("Predicate has more than 2 subjects, processing undefined");
+            throw new IllegalArgumentException("Predicate has more than 2 children, processing undefined");
         }
     }
 
