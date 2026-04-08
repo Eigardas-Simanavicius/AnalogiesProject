@@ -1,48 +1,32 @@
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.ValueSources;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.main.AnalogyManager;
 import org.main.Interfaces.Predicate;
 import org.main.rewriteRule;
 
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-@RunWith(Parameterized.class)
 public class rewriteRulesTest {
 
-    @Parameterized.Parameter(0)
-    public String input;
-
-    @Parameterized.Parameter(1)
-    public String output;
-
-    @Parameterized.Parameter(2)
-    public rewriteRule rule;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data(){
-        Object[][] data = new Object[][]{
-                //[original predicate]         {modifiers}[verbPredicate]_[prepositionPredicate]:[newArgument]{optional asterisk}&[byArgument]
-                {"(exercise *athlete muscle) ","(by exercising( perform *athlete exercise(of muscle)))",new rewriteRule("exercise"," perform_of:exercise*&exercising")},
-                {"(flex *athlete muscle)","(by flexing(display *athlete muscle(with effort)))", new rewriteRule("flex","display_with:effort&flexing")},
-                {"(dislike *rival colleague)","(by disliking(not(respect *rival colleague(as friend))))",new rewriteRule("dislike","!respect_as:friend&disliking")},
-                {"(lose_control_over *captain mutineer)","(by rejecting_control(not (respect mutineer *captain (as leader))))", new rewriteRule("lose_control_over","<!respect_as:leader&rejecting_control")},
-                {"(flunk *student exam)","(by flunking(reject teacher *student(for exam)))", new rewriteRule("flunk","^reject_for:teacher&flunking")},
-                {"(lose_control_over *captain mutineer)","(by rejecting_control(not (respect mutineer *captain (as leader))))", new rewriteRule("lose_control_over","<!respect_as:leader&rejecting_control")},
-                {"(flunk *student exam)","(by flunking(reject teacher *student(for exam)))", new rewriteRule("flunk","^reject_for:teacher&flunking")},
-                {"(step_down_from *president presidency)","(by stepping_down(reject *president presidency(as way_of_life)))",new rewriteRule("step_down_from","reject_as:way_of_life&stepping_down")}
-        };
-        return Arrays.asList(data);
-    }
-
-    @Test
     public void BasicTest() throws IllegalAccessException {
-        Predicate p = AnalogyManager.ConvertToOOP(input);
-        assertEquals(output,rule.rewrite(p));
+        String[] inputs = {"(exercise *athlete muscle) ","(flex *athlete muscle)","(dislike *rival colleague)","(lose_control_over *captain mutineer)","(flunk *student exam)","(step_down_from *president presidency)"};
+        String[] outputs = {"(by exercising( perform *athlete exercise(of muscle)))","(by flexing(display *athlete muscle(with effort)))","(by disliking(not(respect *rival colleague(as friend))))",
+                "(by rejecting_control(not(respect mutineer *captain(as leader))))","(by flunking(reject teacher *student(for exam)))","(by stepping_down(reject *president presidency(as way_of_life)))"};
+        rewriteRule[] rules = {new rewriteRule("exercise"," perform_of:exercise*&exercising"),new rewriteRule("flex","display_with:effort&flexing"),new rewriteRule("dislike","!respect_as:friend&disliking"),
+                new rewriteRule("lose_control_over","<!respect_as:leader&rejecting_control"),new rewriteRule("step_down_from","reject_as:way_of_life&stepping_down")};
+       for(int i = 0; i < inputs.length;i++) {
+           Predicate p = AnalogyManager.ConvertToOOP(inputs[i]);
+           assertEquals(outputs[i], rules[i].rewrite(p).toString());
+       }
     }
 
 
@@ -56,9 +40,20 @@ public class rewriteRulesTest {
 
         @Test
         public void nonMatchingRuleException() {
-            Predicate p = AnalogyManager.ConvertToOOP("(exercise athelete muscle (big mac))");
+            Predicate p = AnalogyManager.ConvertToOOP("(exercise athelete muscle)");
             assertThrows(IllegalArgumentException.class, () -> {
                 new rewriteRule("explode", " perform_of:exercise*&exercising").rewrite(p);
             });
         }
+
+    @Test
+    public void badRuleStructure() {
+        Predicate p = AnalogyManager.ConvertToOOP("(exercise athelete muscle)");
+        assertThrows(IllegalArgumentException.class, () -> {
+            new rewriteRule("exercise", "test").rewrite(p);
+        });
+        assertThrows(InvalidParameterException.class, () -> {
+            new rewriteRule("exercise", "test_ _ _  _ & &::::").rewrite(p);
+        });
+    }
 }

@@ -59,7 +59,7 @@ public class ReWriter {
         // maxcount keeps track of how many rules are bound to each predicate, so we can correctly create permutations
         for (ArrayList<rewriteRule> arrs: rulesMap.values()) {
             permutationCount = permutationCount * arrs.size();
-            maxCount[n] = arrs.size();
+            maxCount[n] = arrs.size()-1;
             n++;
         }
 
@@ -89,7 +89,9 @@ public class ReWriter {
         Iterator<ArrayList<rewriteRule>> it = rules.values().iterator();
         Iterator<String> sIt = rules.keySet().iterator();
         for (int i = 0; i < rules.size(); i++) {
-            map.put(sIt.next(),it.next().get(count[i]));
+            String curr = sIt.next();
+            ArrayList<rewriteRule> currArr = it.next();
+            map.put(curr,currArr.get(count[i]));
         }
 
         return map;
@@ -103,7 +105,7 @@ public class ReWriter {
     private static void updatePermutation(int[] currCount,int n,int[] maxCount){
         if(currCount[n] < maxCount[n]){
             currCount[n]++;
-        }else{
+        }else if(currCount[0] != maxCount[0]){
             currCount[n] = 0;
             updatePermutation(currCount,n-1,maxCount);
         }

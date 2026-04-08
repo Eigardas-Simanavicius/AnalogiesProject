@@ -23,17 +23,22 @@ public class Main {
         // [original predicate]         {modifiers}[verbPredicate]_[prepositionPredicate]:[newArgument]{optional asterisk}&[byArgument]
         rewriteRule rule1 = new rewriteRule("exercise","preform_of:exercise*&exercising");
         rewriteRule rule2 = new rewriteRule("explode","destroy_of:explode*&exploding");
-        rewriteRule rule3 = new rewriteRule("explode","boom_of:explode*:booming");
-//        rule1.testConstructor("exercise", "perform", "of", "exercising", null, "exercise", true);
-//        rule2.testConstructor("explode","destroy","of","exploding",null,"explode",true);
-//        rule3.testConstructor("explode","boom","of","booming",null,"explode",true);
+        rewriteRule rule3 = new rewriteRule("explode","boom_of:boom*&booming");
+        rewriteRule rule4 = new rewriteRule("walk","run_of:sprint*&sprinting");
+        rewriteRule rule5 = new rewriteRule("walk","fly_with:fly*:flying");
+
         ArrayList<rewriteRule> rules = new ArrayList<>();
         rules.add(rule1);
         rules.add(rule2);
-        Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (Whopper jr) (exercise.0 athelete muscle (big mac)) (explode Gregs legs))");
+        rules.add(rule3);
+        rules.add(rule4);
+        rules.add(rule5);
+        Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (exercise.0 athelete muscle) (explode Gregs legs) (walk Steve road))");
         ArrayList<Predicate> ans = ReWriter.reWriteAnalogyAllPermuatations(rules,testClause2);
         System.out.println(ans.size());
-        System.out.println(ans.toString());
-        System.out.println(((Clause) (ans.getFirst())).toIndentedString());
+
+        for(Predicate pred:ans){
+            System.out.println(pred.toString());
+        }
     }
 }
