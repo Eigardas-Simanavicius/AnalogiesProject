@@ -33,12 +33,11 @@ public class Main {
         rules.add(rule3);
         rules.add(rule4);
         rules.add(rule5);
-        Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (exercise.0 athelete muscle) (explode Gregs legs) (walk Steve road))");
+        Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (exercise.0 athelete muscle) (explode Gregs legs) (walk Steve road) (explode gregs feet))");
         ArrayList<Predicate> ans = ReWriter.reWriteAnalogyAllPermuatations(rules,testClause2);
-        System.out.println(ans.size());
-
-        for(Predicate pred:ans){
+        for (Predicate pred: ans){
             System.out.println(pred.toString());
         }
+
     }
 }
