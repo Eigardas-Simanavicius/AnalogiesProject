@@ -4,7 +4,6 @@ import org.main.Interfaces.Predicate;
 import org.main.Interfaces.Rule;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -26,11 +25,13 @@ public class rewriteRule implements Rule {
 
     public rewriteRule(String originalPredicate, String rule){
         // ^<!provide_to:benefactor*&denying
+
         this.originalPredicate = originalPredicate;
-        List<String> ruleSubParts = List.of(rule.split("[_:&]"));
+
+        List<String> ruleSubParts = List.of(rule.split("[:&]"));
 
 
-        if(ruleSubParts.size() != 4){
+        if(ruleSubParts.size() != 3){
             for (String s: ruleSubParts){
                 System.out.println(s);
             }
@@ -43,7 +44,9 @@ public class rewriteRule implements Rule {
             }
         }
 
-        verbPredicate = ruleSubParts.getFirst();
+        List<String> predicatePair = (List.of(ruleSubParts.getFirst().split("_",2)));
+
+        verbPredicate = predicatePair.getFirst();
 
         negation = verbPredicate.contains("!");
         exponent = verbPredicate.contains("^");
@@ -51,14 +54,14 @@ public class rewriteRule implements Rule {
 
         verbPredicate = verbPredicate.replaceAll("[!<^]","");
 
-        prepositionPredicate = ruleSubParts.get(1);
+        prepositionPredicate = predicatePair.get(1);
 
-        newArgument = ruleSubParts.get(2);
+        newArgument = ruleSubParts.get(1);
 
         newArgumentHasAsterisk = newArgument.contains("*");
         newArgument = newArgument.replaceAll("\\*","");
 
-        byArgument = ruleSubParts.get(3);
+        byArgument = ruleSubParts.get(2);
     }
 
     public String getOriginalPredicate(){
@@ -163,7 +166,6 @@ public class rewriteRule implements Rule {
 
     private void validatePredicate(Predicate source){
         if(!source.getName().equals(this.originalPredicate)){
-            System.out.println(source.getName()  + " and " + this.originalPredicate);
             throw new IllegalArgumentException("Predicates do not match between rule and source");
         }
         if(source.getChildren().size() > 2){
