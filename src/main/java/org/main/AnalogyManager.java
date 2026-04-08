@@ -19,9 +19,9 @@ public class AnalogyManager {
             String[] currWords;
             Predicate curr = null;
             int count = 1;
-
+            // we are going to go through the brackets and use them to go up or down the tree
             for (char bracket : brackets) {
-                if (bracket == '(') {
+                if (bracket == '(') {// down the tree
                     currWords = words[count].split(" ");
                     if (Objects.equals(currWords[0], ")")) {
                         throw new InputMismatchException("Null input");
@@ -29,7 +29,7 @@ public class AnalogyManager {
                    curr = predicateBuilder(curr,currWords);
                     count++;
                 } else {
-                    if (bracket == ')') {
+                    if (bracket == ')') { // up the tree
                         if (curr.getParent() != null) {
                             curr = curr.getParent();
                         }
@@ -49,6 +49,7 @@ public class AnalogyManager {
         return null;
     }
 
+    //  makes sure brackets are the matching
     private static boolean bracketMatch(char[] brackets){
         Stack<Character> stack = new Stack<>();
         for (char bracket:brackets){
@@ -66,6 +67,7 @@ public class AnalogyManager {
     private static Predicate predicateBuilder(Predicate parent,String[] currWords){
         Predicate next = new Clause(currWords[0]);
         Subject subject;
+        // this just adds all the subjects as children
         for (int i = 1; i < currWords.length; i++) {
             subject = new Subject(currWords[i]);
             if(currWords[i].toCharArray()[0] == '*'){
