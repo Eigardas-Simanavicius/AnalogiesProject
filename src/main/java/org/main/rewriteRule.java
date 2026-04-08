@@ -97,24 +97,6 @@ public class rewriteRule implements Rule {
         return prepositionPredicate;
     }
 
-    public void testConstructor(String origPred, String verb, String preposition, String byArg, String modifier, String newArg, Boolean newArgAsterisk){
-        this.originalPredicate = origPred;
-        this.verbPredicate = verb;
-        this.prepositionPredicate = preposition;
-        this.byArgument = byArg;
-        this.newArgument = newArg;
-        this.newArgumentHasAsterisk = newArgAsterisk;
-        if(modifier != null) {
-            if (modifier.equals("!")) {
-                this.negation = true;
-            } else if (modifier.equals("^")) {
-                this.exponent = true;
-            } else if (modifier.equals("<")) {
-                this.lessThan = true;
-            }
-        }
-    }
-
 
     public Predicate rewrite(Predicate source){
         validatePredicate(source);
@@ -165,6 +147,9 @@ public class rewriteRule implements Rule {
     }
 
     private void validatePredicate(Predicate source){
+        if(source == null){
+            throw new IllegalArgumentException("Null input not allowed");
+        }
         if(!source.getName().equals(this.originalPredicate)){
             throw new IllegalArgumentException("Predicates do not match between rule and source");
         }
