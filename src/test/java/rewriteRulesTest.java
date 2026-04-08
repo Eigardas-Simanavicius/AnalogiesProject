@@ -30,7 +30,8 @@ public class rewriteRulesTest {
                 {"(flex *athlete muscle)","(by flexing(display *athlete muscle(with effort)))", new rewriteRule("flex","display_with:effort&flexing")},
                 {"(dislike *rival colleague)","(by disliking(not(respect *rival colleague(as friend))))",new rewriteRule("dislike","!respect_as:friend&disliking")},
                 {"(lose_control_over *captain mutineer)","(by rejecting_control(not (respect mutineer *captain (as leader))))", new rewriteRule("lose_control_over","<!respect_as:leader&rejecting_control")},
-                {"(flunk *student exam)","(by flunking(reject teacher *student(for exam)))", new rewriteRule("flunk","^reject_for:teacher&flunking")}
+                {"(flunk *student exam)","(by flunking(reject teacher *student(for exam)))", new rewriteRule("flunk","^reject_for:teacher&flunking")},
+                {"(step_down_from *president presidency)","(by stepping_down(reject *president presidency(as way_of_life)))",new rewriteRule("step_down_from","reject_as:way_of_life&stepping_down")}
         };
         return Arrays.asList(data);
     }
