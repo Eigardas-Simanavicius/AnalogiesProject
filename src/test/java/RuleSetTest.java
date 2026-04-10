@@ -10,7 +10,7 @@ public class RuleSetTest {
 
     @Test
     public void simpleTest() throws FileNotFoundException{
-        RuleSet rules = new RuleSet("rewrite rules.txt");
+        RuleSet rules = new RuleSet("rewriterules.txt");
         assertTrue(true);
     }
 }

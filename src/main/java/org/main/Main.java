@@ -26,6 +26,13 @@ public class Main {
             System.out.println("failed config " + e.getMessage());
         }
 
+        //Config Init
+        // no given config
+        if(args.length == 0){
+            ConfigSetup.findConfig();
+        }else{
+            ConfigSetup.applyConfig(args[0]);
+        }
 
         System.out.println("Flat Abstract String");
         System.out.println(AnalogyManager.convertToAbstractString(AnalogyManager.ConvertToOOP("(if (can (cause.0 *AIDS (some death (when crushing (crush something))))) (can (succeed_at *AIDS (crush something))))"),false));
