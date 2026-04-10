@@ -28,7 +28,7 @@ public class RuleSet {
         while(scanner.hasNextLine()){
             line = scanner.nextLine();
 
-            ArrayList<String> delimitedLine = new ArrayList<>(List.of(line.split(" ")));
+            ArrayList<String> delimitedLine = new ArrayList<>(List.of(line.split("[ \t]")));
             String verb = delimitedLine.removeFirst();
 
             if(stringRules.containsKey(delimitedLine.getFirst())){
