@@ -4,9 +4,11 @@ import org.main.Interfaces.AnalogicalObject;
 import org.main.Interfaces.Predicate;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReWriter {
-
+    private static final Logger logger = Logger.getLogger(ReWriter.class.getName());
     // This takes an analogy and re-writes according to the provided rule set
     private static Predicate reWriteAnalogy(LinkedHashMap<String,ArrayList<RewriteRule>> rulesMap, Predicate source, int[] currCount, ArrayList<Integer> locations)  {
         Predicate reWrite = AnalogyManager.ConvertToOOP(source.toString());
@@ -27,15 +29,18 @@ public class ReWriter {
 
         Predicate parent = curr.getParent();
         curr.setParent(null);
-        children =  ((Clause)curr).getClauseChildren();
-        ((Clause)curr).removeClauses();
+        children = ((Clause) curr).getClauseChildren();
+        ((Clause) curr).removeClauses();
         parent.getChildren().remove(curr);
-
         replacement = rule.rewrite((Predicate) curr);
-        replacement.setParent(parent);
-        replacement.addAllEmbedded(children);
-        parent.addEmbedded(replacement);
+        if(replacement != null) {
+            replacement.setParent(parent);
+            replacement.addAllEmbedded(children);
+            parent.addEmbedded(replacement);
+        }else{
 
+            logger.log(Level.WARNING, "rules rewrite failed, predicate " + curr.getName() + " will not be rewritten with rule " + rule);
+        }
     }
     // this is the main controller function,
     public static ArrayList<Predicate> reWriteAnalogyAllPermuatations(ArrayList<RewriteRule> rules, Predicate source)  {
@@ -43,6 +48,10 @@ public class ReWriter {
         removeNumbers((Clause) source);
         // Linked hash maps ensure items are returned in order of insertion, very important here
         LinkedHashMap<String,ArrayList<RewriteRule>> rulesMap = mapAllRules(rules,source);
+        if(rulesMap.isEmpty()){
+            logger.log(Level.WARNING, "no relevant rules for analogy " + source + " returning nothing");
+            return null;
+        }
         ArrayList<Integer> targets = findPredicatestoChange(source,rulesMap);
         ArrayList<Predicate> permutations = new ArrayList<>();
         int[] maxCount = createMaxCount(targets,source,rulesMap);
@@ -62,7 +71,6 @@ public class ReWriter {
         ArrayList<Integer> locations = new ArrayList<Integer>();
         Set<String> keys = rules.keySet();
         ArrayList<Predicate> children = head.getAllChildren();
-
         for(int i = 0;i < children.size();i++){
             if(keys.contains(children.get(i).getName())){
                 locations.add(i);

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.*;
 
+
 public class Main {
     public static void main(String[] args) throws IllegalArgumentException {
 
@@ -24,6 +25,7 @@ public class Main {
         }catch(IOException e){
             System.out.println("failed config " + e.getMessage());
         }
+
 
         System.out.println("Flat Abstract String");
         System.out.println(AnalogyManager.convertToAbstractString(AnalogyManager.ConvertToOOP("(if (can (cause.0 *AIDS (some death (when crushing (crush something))))) (can (succeed_at *AIDS (crush something))))"),false));

@@ -9,6 +9,7 @@ import org.main.RewriteRule;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ReWritertests  {
 
@@ -22,6 +23,7 @@ public class ReWritertests  {
         rules.add(rule2);
         Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (Whopper jr) (exercise.0 athelete muscle (big mac)) (explode Gregs legs))");
         ArrayList<Predicate> ans = ReWriter.reWriteAnalogyAllPermuatations(rules,testClause2);
+        System.out.println(ans.toString());
         assertEquals("(Sigma male(Whopper jr)(by exercising(preform athelete exercise(of muscle))(big mac))(by exploding(destroy Gregs explode(of legs))))", ((Clause) (ans.getFirst())).toString());
     }
 
@@ -38,6 +40,17 @@ public class ReWritertests  {
 
     }
 
+    @Test
+    public void testNullRewriteLog(){
+        ArrayList<RewriteRule> rules = new ArrayList<>();
+        RewriteRule rule1 = new RewriteRule("explode","preform_of:exercise*&exercising");
+        rules.add(rule1);
+        Clause testClause1 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (exercise Gregs legs) )");
+        assertNull(ReWriter.reWriteAnalogyAllPermuatations(rules,testClause1));
+
+
+    }
+
     private static @NonNull ArrayList<RewriteRule> getRewriteRules() {
         RewriteRule rule1 = new RewriteRule("exercise","preform_of:exercise*&exercising");
         RewriteRule rule2 = new RewriteRule("explode","destroy_of:explode*&exploding");
@@ -45,6 +58,7 @@ public class ReWritertests  {
         RewriteRule rule4 = new RewriteRule("walk","run_of:sprint*&sprinting");
         RewriteRule rule5 = new RewriteRule("walk","fly_with:fly*:flying");
         RewriteRule rule6 = new RewriteRule("exercise","lift_of:lift*&lifting");
+        RewriteRule rule7 = new RewriteRule("garbage","lift_of:lift*&lifting");
 
         ArrayList<RewriteRule> rules = new ArrayList<>();
         rules.add(rule1);
@@ -53,6 +67,7 @@ public class ReWritertests  {
         rules.add(rule4);
         rules.add(rule5);
         rules.add(rule6);
+        rules.add(rule7);
         return rules;
     }
 }
