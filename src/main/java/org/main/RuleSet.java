@@ -28,17 +28,27 @@ public class RuleSet {
         while(scanner.hasNextLine()){
             line = scanner.nextLine();
 
-            ArrayList<String> delimitedLine = new ArrayList<>(List.of(line.split("[ \t]")));
-            String verb = delimitedLine.removeFirst();
+            ArrayList<String> delimitedLine = new ArrayList<>(
+                    Arrays.stream(
+                            line.split("[ \t]"))
+                            .map(x -> x.replace(",", "").trim())
+                            .toList());
 
-            if(stringRules.containsKey(delimitedLine.getFirst())){
-                stringRules.get(verb).addAll(delimitedLine);
-                parsedRules.remove(verb); // Removes parsed rules as they will be incorrect if more rules apply then there are currently
-            }else {
-                stringRules.put(
-                        verb,
-                        (ArrayList<String>) delimitedLine.stream().map(x -> x.replace(",", "").trim()).toList()
-                );
+
+
+            if(delimitedLine.size() > 2) {
+                String verb = delimitedLine.removeFirst();
+                delimitedLine.removeIf(x -> !x.matches("^.*_.*:.*&.*$"));
+
+                if (!delimitedLine.isEmpty() && stringRules.containsKey(delimitedLine.getFirst())) {
+                    stringRules.get(verb).addAll(delimitedLine);
+                    parsedRules.remove(verb); // Removes parsed rules as they will be incorrect if more rules apply then there are currently
+                } else if(!delimitedLine.isEmpty()){
+                    stringRules.put(
+                            verb,
+                            delimitedLine
+                    );
+                }
             }
         }
     }
