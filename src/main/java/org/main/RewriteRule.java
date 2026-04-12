@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 //Hope this helps when writing a parser
 
 public class RewriteRule implements Rule {
+    private String originalRule;
     private String originalPredicate;
     private String verbPredicate;
     private String prepositionPredicate;
@@ -28,7 +29,7 @@ public class RewriteRule implements Rule {
 
     public RewriteRule(String originalPredicate, String rule){
         // ^<!provide_to:benefactor*&denying
-
+        originalRule = rule;
         this.originalPredicate = originalPredicate;
 
         List<String> ruleSubParts = List.of(rule.split("[:&]"));
@@ -173,6 +174,11 @@ public class RewriteRule implements Rule {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString(){
+        return originalRule;
     }
 
 }
