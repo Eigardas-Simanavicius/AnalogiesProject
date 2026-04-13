@@ -46,7 +46,7 @@ public class ConfigSetup {
                 String line = myReader.nextLine();
                 String[] currLine = line.replace(" ","").split("=");
                 if(currLine[0].equals("rules")){
-                    config.setRuleFilePath(new RuleSet(currLine[1]));
+                    config.setRuleSet(new RuleSet(currLine[1]));
                 }else if(currLine[0].equals("analogies")){
                     config.setAnalogiesFilePath(currLine[1]);
                 }else if(currLine[0].equals("rewrite")){

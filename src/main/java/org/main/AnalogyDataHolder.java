@@ -1,5 +1,6 @@
 package org.main;
 
+import org.main.Objects.Config;
 import org.main.Objects.RewriteRule;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ public class AnalogyDataHolder {
     private static final ConcurrentHashMap<String, ArrayList<String>> Analogies = new ConcurrentHashMap<>();
     private static final Logger logger = Logger.getLogger(RewriteRule.class.getName());
 
-    public static void addAnalogiesFromFile(String filename,int threadsUsed,boolean reWriteAll) throws InterruptedException {
+    public static void addAnalogiesFromFile(String filename, int threadsUsed, Config config) throws InterruptedException {
         if(threadsUsed < 1){
             threadsUsed = 1;
             logger.warning("Threads given was less then zero, will default to one thread");
@@ -32,7 +33,7 @@ public class AnalogyDataHolder {
                 // this is to make up for possible loss of lines when using integer division
                 fixnumbers = linesNumber - ((sets/threadsUsed) * threadsUsed);
             }
-            Thread t = new sortAnalogies(filename,sets*i,sets*(i+1)+fixnumbers,latch,reWriteAll);
+            Thread t = new sortAnalogies(filename,sets*i,sets*(i+1)+fixnumbers,latch,config);
             t.start();
         }
        try {
@@ -66,12 +67,14 @@ public class AnalogyDataHolder {
         int endline;
         CountDownLatch latch;
         boolean rewrite;
-        sortAnalogies(String filename,int startLine,int endline,CountDownLatch latch,boolean rewrite){
+        Config config;
+        sortAnalogies(String filename,int startLine,int endline,CountDownLatch latch,boolean rewrite,Config config){
             this.filename = filename;
             this.endline = endline;
             this.startLine = startLine;
             this.latch = latch;
             this.rewrite = rewrite;
+            this.config = config;
         }
 
         public void run(){
@@ -81,26 +84,27 @@ public class AnalogyDataHolder {
                     System.out.println(startLine  + " " + endline);
                     if(i >= startLine){
                         line = br.readLine();
-                        processLine(line);
+                        processLine(line,config);
                     }
                 }
             } catch (IOException e) {
                 logger.warning("File not found, no rules will be written to");
             }
             latch.countDown();
+
         }
 
-        public static void processLine(String line){
+        public static void processLine(String line,Config config){
             String[] arr = line.replace("\t","  ").split(" {2}");
             String topic = arr[0];
             int lenght = 0;
             int jump;
-            if(false){
+            if(!config.isAbstracts()){
                 jump = 2;
             }else {
                 jump = 3;
             }
-            if(true){
+            if(!config.isRewrite()){
                 lenght = (arr.length-1)/jump;
             }else {
                 lenght = 1;
@@ -113,10 +117,17 @@ public class AnalogyDataHolder {
                 }else {
                     Analogies.put(topic, new ArrayList<String>());
                     Analogies.get(topic).add(arr[i]);
+                    if(config.isRewrite()){
+
+                    }
                 }
             }
             System.out.println(Analogies.toString());
 
+        }
+
+        private ArrayList<String> getRewrites(String topic,Config config){
+           // return ReWriter.reWriteAnalogyAllPermuatations(config.getRuleSet().)
         }
 
     }

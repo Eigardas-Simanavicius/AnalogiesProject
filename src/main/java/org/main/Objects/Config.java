@@ -22,11 +22,11 @@ public class Config {
         Config.targets = targets;
     }
 
-    public  RuleSet getRuleFilePath() {
+    public  RuleSet getRuleSet() {
         return ruleSet;
     }
 
-    public  void setRuleFilePath(RuleSet ruleSet) {
+    public  void setRuleSet(RuleSet ruleSet) {
         Config.ruleSet = ruleSet;
     }
 
