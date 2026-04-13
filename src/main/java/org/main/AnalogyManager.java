@@ -169,5 +169,36 @@ public class AnalogyManager {
 
         return prettifiedStringBuilder.toString();
     }
+
+    // Gets the richness of a predicate. Returns -1.0 if predicate is null
+    public static double getPredicateRichness(Predicate predicate){
+        if(predicate == null) return -1.0;
+
+        double richness = 0.0;
+
+        Queue<AnalogicalObject> nestedLayer = new ArrayDeque<>(predicate.getChildren());
+        int layerSize = nestedLayer.size();
+        int layerDepth = 0;
+
+        do{
+            richness += Math.pow(10,layerDepth) * nestedLayer.size();
+
+            for(int i = 0; i < layerSize; i++){
+                AnalogicalObject analogicalObject = nestedLayer.remove();
+
+                if(analogicalObject instanceof Predicate){
+                    nestedLayer.addAll(((Predicate) analogicalObject).getChildren());
+                }
+            }
+
+            layerDepth++;
+
+            layerSize = nestedLayer.size();
+
+        }while(layerSize != 0);
+
+        richness = Math.log10(richness);
+        return richness;
+    }
 }
 
