@@ -1,14 +1,14 @@
 package org.main;
 
+import org.main.Interfaces.Predicate;
 import org.main.Objects.Config;
 import org.main.Objects.RewriteRule;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
@@ -19,19 +19,20 @@ public class AnalogyDataHolder {
     private static final ConcurrentHashMap<String, ArrayList<String>> Analogies = new ConcurrentHashMap<>();
     private static final Logger logger = Logger.getLogger(RewriteRule.class.getName());
 
-    public static void addAnalogiesFromFile(String filename, int threadsUsed, Config config) throws InterruptedException {
-        if(threadsUsed < 1){
-            threadsUsed = 1;
+    // setting up out threads
+    public static void addAnalogiesFromFile(String filename, Config config) throws InterruptedException {
+        if(config.getThreadsUsed() < 1){
+            config.setThreadsUsed(1);
             logger.warning("Threads given was less then zero, will default to one thread");
         }
-        CountDownLatch latch = new CountDownLatch(threadsUsed);
+        CountDownLatch latch = new CountDownLatch(config.getThreadsUsed());
        int linesNumber = getLineNumber(filename);
-       int sets = linesNumber/threadsUsed;
+       int sets = linesNumber/config.getThreadsUsed();
        int fixnumbers = 0;
-       for(int i = 0;  i < threadsUsed; i++){
-            if (i == threadsUsed-i){
+       for(int i = 0;  i < config.getThreadsUsed(); i++){
+            if (i == config.getThreadsUsed()-i){
                 // this is to make up for possible loss of lines when using integer division
-                fixnumbers = linesNumber - ((sets/threadsUsed) * threadsUsed);
+                fixnumbers = linesNumber - ((sets/config.getThreadsUsed()) * config.getThreadsUsed());
             }
             Thread t = new sortAnalogies(filename,sets*i,sets*(i+1)+fixnumbers,latch,config);
             t.start();
@@ -39,9 +40,8 @@ public class AnalogyDataHolder {
        try {
            latch.await();
        }catch (Exception e){
-           logger.warning("Threads given was less then zero, will default to one thread");
+           logger.warning("latch exploded");
        }
-        System.out.println("here");
 
     }
 
@@ -57,23 +57,19 @@ public class AnalogyDataHolder {
         return counter;
     }
 
-    private static void addAnalogy(){
-
-    }
-
+    //the main function, each thread will read the their part of the file and work with the analogies
     static class sortAnalogies extends Thread{
         String filename;
         int startLine;
         int endline;
         CountDownLatch latch;
-        boolean rewrite;
         Config config;
-        sortAnalogies(String filename,int startLine,int endline,CountDownLatch latch,boolean rewrite,Config config){
+
+        sortAnalogies(String filename,int startLine,int endline,CountDownLatch latch,Config config){
             this.filename = filename;
             this.endline = endline;
             this.startLine = startLine;
             this.latch = latch;
-            this.rewrite = rewrite;
             this.config = config;
         }
 
@@ -94,40 +90,41 @@ public class AnalogyDataHolder {
 
         }
 
+        // intaking a line, and trying to get something useful out of it
         public static void processLine(String line,Config config){
             String[] arr = line.replace("\t","  ").split(" {2}");
             String topic = arr[0];
-            int lenght = 0;
-            int jump;
+            int length = 1;
+            int jump = 3;
+
             if(!config.isAbstracts()){
                 jump = 2;
-            }else {
-                jump = 3;
             }
+
             if(!config.isRewrite()){
-                lenght = (arr.length-1)/jump;
-            }else {
-                lenght = 1;
+                length = (arr.length-1)/jump;
             }
 
             for(int i = 1; i < arr.length-1; i = i + jump){
-                System.out.println(i + " " + lenght);
+
                 if(Analogies.containsKey(topic)){
                     Analogies.get(topic).add(arr[i]);
                 }else {
                     Analogies.put(topic, new ArrayList<String>());
                     Analogies.get(topic).add(arr[i]);
                     if(config.isRewrite()){
-
+                        Analogies.putAll((Map<? extends String, ? extends ArrayList<String>>) getRewrites(arr[i],config));
                     }
                 }
             }
-            System.out.println(Analogies.toString());
 
         }
 
-        private ArrayList<String> getRewrites(String topic,Config config){
-           // return ReWriter.reWriteAnalogyAllPermuatations(config.getRuleSet().)
+
+        // incase we need all the rewrites
+        private static ArrayList<String> getRewrites(String Source, Config config){
+           return  (ArrayList<String>) (ReWriter.reWriteAnalogyAllPermuatations(config.getRuleSet().getRuleForAnalogy(Source),AnalogyManager.ConvertToOOP(Source))).stream().map(f -> f.toString());
+
         }
 
     }

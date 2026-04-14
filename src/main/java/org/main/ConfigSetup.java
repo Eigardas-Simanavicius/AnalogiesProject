@@ -11,34 +11,39 @@ import java.util.logging.Logger;
 // exists to read config , and do stuff with it
 public class ConfigSetup {
     private static final Logger logger = Logger.getLogger(ConfigSetup.class.getName());
-    public static void applyConfig(String filepath){
+    public static Config applyConfig(String filepath){
+        Config config;
         try{
             File configFile = new File(filepath);
-            setupConfig(configFile);
+            config = setupConfig(configFile);
         }catch (Exception e){
-            findConfig();
+           config = findConfig();
         }
+        return config;
     }
 
-    public static void findConfig(){
+    public static Config findConfig(){
+        Config config;
         try {
             File configFile = new File("config.txt");
             if(configFile.createNewFile()) {
-                createDefaultConfig(configFile);
-            }else { setupConfig(configFile);}
+                //config = createDefaultConfig(configFile);
+            }else { config = setupConfig(configFile);}
         }catch (Exception e){
 
         }
-
+        //return config;
+        return null;
     }
 
-    private static void createDefaultConfig(File configFile) throws IOException {
+    private static Config createDefaultConfig(File configFile) throws IOException {
 
-        configFile.createNewFile();
         logger.log(Level.WARNING, "No config found or provided, will create default file, empty by default,nothing will be loaded");
+        //return configFile.createNewFile();
+        return null;
     }
 
-    private static Config setupConfig(File configFile) {
+    public static Config setupConfig(File configFile) {
         System.out.println("here");
         Config config = new Config();
         try (Scanner myReader = new Scanner(configFile)) {

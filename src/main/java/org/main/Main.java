@@ -2,6 +2,7 @@ package org.main;
 
 import org.main.Interfaces.Predicate;
 import org.main.Objects.Clause;
+import org.main.Objects.Config;
 import org.main.Objects.RewriteRule;
 
 import java.io.IOException;
@@ -30,13 +31,15 @@ public class Main {
 
         //Config Init
         // no given config
+        Config config;
         if(args.length == 0){
-            ConfigSetup.findConfig();
+            //config = ConfigSetup.findConfig();
         }else{
-            ConfigSetup.applyConfig(args[0]);
+            //config = ConfigSetup.applyConfig(args[0]);
         }
-
-        AnalogyDataHolder.addAnalogiesFromFile("/home/eigardas/Documents/Github/AnalogiesProject/test.txt",1,false);
+        config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
+        System.out.println(config.isRewrite());
+        AnalogyDataHolder.addAnalogiesFromFile("/home/eigardas/Documents/Github/AnalogiesProject/test.txt",config);
 
     }
 }

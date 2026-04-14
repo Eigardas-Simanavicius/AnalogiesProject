@@ -18,3 +18,39 @@ Apr 10, 2026 12:02:33 P.M. org.main.ConfigSetup createDefaultConfig
 WARNING: No config found or provided, will create default file, empty by default,nothing will be loaded
 Apr 10, 2026 12:02:33 P.M. org.main.Objects.RewriteRule validatePredicate
 WARNING: Rule not applicable to input predicate, as predicates are mismatched.
+Apr 14, 2026 9:26:19 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:27:01 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:27:54 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:28:42 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:28:42 A.M. org.main.ReWriter reWriteAnalogyAllPermuatations
+WARNING: no relevant rules for analogy (if(can(cause *AIDS(some death(when crushing(crush something)))))(can(succeed_at *AIDS(crush something)))) returning nothing
+Apr 14, 2026 9:32:01 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:32:58 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:33:24 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:33:49 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:34:41 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:35:05 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:37:59 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:39:46 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:40:20 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:40:30 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:41:31 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:43:04 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread
+Apr 14, 2026 9:44:48 A.M. org.main.AnalogyDataHolder addAnalogiesFromFile
+WARNING: Threads given was less then zero, will default to one thread

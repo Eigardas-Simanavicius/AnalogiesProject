@@ -9,9 +9,18 @@ public class Config {
     private static boolean abstracts = true;
     private static String analogiesFilePath;
     private static RuleSet ruleSet;
+    private static int threadsUsed;
     private static ArrayList<String> targets = new ArrayList<>();
     public Config(){
 
+    }
+
+    public  int getThreadsUsed() {
+        return threadsUsed;
+    }
+
+    public void setThreadsUsed(int threadsUsed) {
+        Config.threadsUsed = threadsUsed;
     }
 
     public  ArrayList<String> getTargets() {
