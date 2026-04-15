@@ -25,7 +25,6 @@ public class AnalogyDataHolder {
         try (BufferedReader br = new BufferedReader(new FileReader(config.getAnalogiesFilePath()))) {
             String line;
             while ((line = br.readLine()) != null) {
-                processLine(line, config);
             }
         } catch (IOException e) {
             System.out.println("Error reading file.");
@@ -37,44 +36,46 @@ public class AnalogyDataHolder {
     public static void processLine(String line, Config config) {
 
         String[] arr = line.replace("\t", "  ").split(" {2}");
-        String topic = arr[0];
-        int jump = config.getJumps();
-        int length;
-        if (config.isRewrite()) {
-            length = 2;
-        } else {
-            length = arr.length;
-        }
-        int i = 0;
-        i = 1;
-        for (i = 1; i < length; i = i + jump) {
-            if (analogies.containsKey(topic)) {
-                analogies.get(topic).add(arr[i]);
+        if(config.getTargets().isEmpty() || !config.getTargets().isEmpty() && config.getTargets().contains(arr[0])) {
+            String topic = arr[0];
+            int jump = config.getJumps();
+            int length;
+            if (config.isRewrite()) {
+                length = 2;
             } else {
-                analogies.put(topic, new ArrayList<String>());
-                analogies.get(topic).add(arr[i]);
+                length = arr.length;
             }
-            if (structuresHash.containsKey(hashPredicate(arr[i]))) {
-                structuresHash.get(hashPredicate(arr[i])).add(arr[i].intern());
-            } else {
-                structuresHash.put(hashPredicate(arr[i]), new ArrayList<String>());
-                structuresHash.get(hashPredicate(arr[i])).add(arr[i].intern());
+            int i = 0;
+            i = 1;
+            for (i = 1; i < length; i = i + jump) {
+                if (analogies.containsKey(topic)) {
+                    analogies.get(topic).add(arr[i]);
+                } else {
+                    analogies.put(topic, new ArrayList<String>());
+                    analogies.get(topic).add(arr[i]);
+                }
+                if (structuresHash.containsKey(hashPredicate(arr[i]))) {
+                    structuresHash.get(hashPredicate(arr[i])).add(arr[i].intern());
+                } else {
+                    structuresHash.put(hashPredicate(arr[i]), new ArrayList<String>());
+                    structuresHash.get(hashPredicate(arr[i])).add(arr[i].intern());
+                }
+
+
             }
 
+            if (config.isRewrite()) {
+                ArrayList<String> rewrites = getRewrites(arr[1], config);
+                if (rewrites.isEmpty()) {
+                    analogies.get(topic).addAll(rewrites);
 
-        }
-
-        if (config.isRewrite()) {
-            ArrayList<String> rewrites = getRewrites(arr[1], config);
-            if (rewrites.isEmpty()) {
-                analogies.get(topic).addAll(rewrites);
-
-                for (String rewrite : rewrites) {
-                    if (structuresHash.containsKey(hashPredicate(rewrite))) {
-                        structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
-                    } else {
-                        structuresHash.put(hashPredicate(rewrite), new ArrayList<String>());
-                        structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                    for (String rewrite : rewrites) {
+                        if (structuresHash.containsKey(hashPredicate(rewrite))) {
+                            structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                        } else {
+                            structuresHash.put(hashPredicate(rewrite), new ArrayList<String>());
+                            structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                        }
                     }
                 }
             }
