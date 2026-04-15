@@ -55,7 +55,7 @@ public class ConfigSetup {
                 }else if(currLine[0].equals("analogies")){
                     config.setAnalogiesFilePath(currLine[1]);
                 }else if(currLine[0].equals("rewrite")){
-                    config.setRewrite(Boolean.parseBoolean(currLine[1]));6
+                    config.setRewrite(Boolean.parseBoolean(currLine[1]));
                 }else if(currLine[0].equals("abstracts")){
                     config.setRewrite(Boolean.parseBoolean(currLine[1]));
                 } else if (currLine[0].equals("threads")) {

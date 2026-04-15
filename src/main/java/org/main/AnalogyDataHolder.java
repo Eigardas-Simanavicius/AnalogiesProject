@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
@@ -86,7 +87,9 @@ public class AnalogyDataHolder {
                 for (int i = 0; i < endline; i++){
                     if(i >= startLine){
                         line = br.readLine();
-                        processLine(line,config);
+                        if(line != null) {
+                            processLine(line, config);
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -101,13 +104,14 @@ public class AnalogyDataHolder {
 
             String[] arr = line.replace("\t","  ").split(" {2}");
             String topic = arr[0];
-            int jump = 4;
+            int jump = 3;
             int lenght;
             if(config.isRewrite()){
                 lenght =  2;
             }else{
                 lenght = arr.length;
             }
+        try {
 
             for (int i = 1; i < lenght; i = i + jump) {
                 if (analogies.containsKey(topic)) {
@@ -125,11 +129,11 @@ public class AnalogyDataHolder {
 
             }
 
-            if(config.isRewrite()) {
+            if (config.isRewrite()) {
                 ArrayList<String> rewrites = getRewrites(arr[1], config);
                 analogies.get(topic).addAll(rewrites);
 
-                for (String rewrite: rewrites){
+                for (String rewrite : rewrites) {
                     if (structureHash.containsKey(hashPredicate(rewrite))) {
                         structureHash.get(hashPredicate(rewrite)).add(rewrite);
                     } else {
@@ -138,6 +142,9 @@ public class AnalogyDataHolder {
                     }
                 }
             }
+        } catch (Exception e) {
+            System.out.println(arr[0] + "failed at this one " + arr[1]) ;
+        }
 
         }
 
@@ -145,6 +152,7 @@ public class AnalogyDataHolder {
         // incase we need all the rewrites
         private static ArrayList<String> getRewrites(String Source, Config config){
             ArrayList<String> re = new ArrayList<>();
+            System.out.println(Source + " changeing");
             ArrayList<Predicate> preds = ReWriter.reWriteAnalogyAllPermutations(config.getRuleSet().getRuleForAnalogy(Source),AnalogyManager.ConvertToOOP(Source));
             if(preds != null) {
                 for (Predicate pred : preds) {

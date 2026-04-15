@@ -40,10 +40,7 @@ public class Main {
             //config = ConfigSetup.applyConfig(args[0]);
         }
         config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
-        AnalogyDataHolder.addAnalogiesFromFile("/home/eigardas/Documents/Github/AnalogiesProject/test.txt",config);
-        System.out.println(AnalogyDataHolder.getAnalogies());
-        System.out.println(AnalogyDataHolder.getStructreHashes());
-
+        AnalogyDataHolder.addAnalogiesFromFile(config.getAnalogiesFilePath(),config);
 
     }
 }
