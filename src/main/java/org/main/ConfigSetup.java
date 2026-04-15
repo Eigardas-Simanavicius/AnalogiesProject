@@ -4,6 +4,8 @@ import org.main.Objects.Config;
 import org.main.Objects.RuleSet;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,8 +58,10 @@ public class ConfigSetup {
                     config.setAnalogiesFilePath(currLine[1]);
                 }else if(currLine[0].equals("rewrite")){
                     config.setRewrite(Boolean.parseBoolean(currLine[1]));
-                }else if(currLine[0].equals("abstracts")){
-                    config.setRewrite(Boolean.parseBoolean(currLine[1]));
+                }else if(currLine[0].equals("targets")){
+                    config.setTargets((ArrayList<String>) Arrays.stream(currLine[1].split(",")).toList());
+                } else if (currLine[0].equals("jumps")) {
+                    config.setJumps(Integer.parseInt(currLine[1]));
                 }
             }
         } catch (FileNotFoundException e) {

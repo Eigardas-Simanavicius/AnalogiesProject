@@ -9,19 +9,17 @@ public class Config {
     private static boolean abstracts = true;
     private static String analogiesFilePath;
     private static RuleSet ruleSet;
-    private static int threadsUsed;
     private static ArrayList<String> targets = new ArrayList<>();
+    private static int jump = 3;
     public Config(){
 
     }
 
-
-    public  int getThreadsUsed() {
-        return threadsUsed;
+    public  int getJumps() {
+        return jump;
     }
-
-    public void setThreadsUsed(int threadsUsed) {
-        Config.threadsUsed = threadsUsed;
+    public  void setJumps(int jumps) {
+        Config.jump = jumps;
     }
 
     public  ArrayList<String> getTargets() {

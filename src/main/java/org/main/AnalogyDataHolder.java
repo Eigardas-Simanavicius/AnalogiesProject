@@ -38,7 +38,7 @@ public class AnalogyDataHolder {
 
         String[] arr = line.replace("\t", "  ").split(" {2}");
         String topic = arr[0];
-        int jump = 3;
+        int jump = config.getJumps();
         int length;
         if (config.isRewrite()) {
             length = 2;
@@ -66,14 +66,16 @@ public class AnalogyDataHolder {
 
         if (config.isRewrite()) {
             ArrayList<String> rewrites = getRewrites(arr[1], config);
-            analogies.get(topic).addAll(rewrites);
+            if (rewrites.isEmpty()) {
+                analogies.get(topic).addAll(rewrites);
 
-            for (String rewrite : rewrites) {
-                if (structuresHash.containsKey(hashPredicate(rewrite))) {
-                    structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
-                } else {
-                    structuresHash.put(hashPredicate(rewrite), new ArrayList<String>());
-                    structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                for (String rewrite : rewrites) {
+                    if (structuresHash.containsKey(hashPredicate(rewrite))) {
+                        structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                    } else {
+                        structuresHash.put(hashPredicate(rewrite), new ArrayList<String>());
+                        structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
+                    }
                 }
             }
         }
