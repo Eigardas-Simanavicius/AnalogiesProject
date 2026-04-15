@@ -39,20 +39,11 @@ public class Main {
         }else{
             //config = ConfigSetup.applyConfig(args[0]);
         }
-        //config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
-        //AnalogyDataHolder.addAnalogiesFromFile("/home/eigardas/Documents/Github/AnalogiesProject/test.txt",config);
-        RewriteRule rule1 = new RewriteRule("cause","produce_for:victim&causing");
-        ArrayList<RewriteRule> rules = new ArrayList<>();
-        rules.add(rule1);
-        Predicate pred = (Clause)AnalogyManager.ConvertToOOP("(if (can (cause *AIDS (some death (when crushing (crush something))))) (can (succeed_at *AIDS (crush something))))");
-        ArrayList<Predicate> ans = ReWriter.reWriteAnalogyAllPermutations(rules,pred);
-        Iterator<AnalogicalObject> it = ((Clause) ans.getFirst()).getPreOrderIterator();
-        StringBuffer ap = new StringBuffer();
-        while (it.hasNext()){
-            ap.append(it.next().getName() + " ");
-        }
-        System.out.println(ap);
-        System.out.println(ans.toString());
+        config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
+        AnalogyDataHolder.addAnalogiesFromFile("/home/eigardas/Documents/Github/AnalogiesProject/test.txt",config);
+        System.out.println(AnalogyDataHolder.getAnalogies());
+        System.out.println(AnalogyDataHolder.getStructreHashes());
+
 
     }
 }

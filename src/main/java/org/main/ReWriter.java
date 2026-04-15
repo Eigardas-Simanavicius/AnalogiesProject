@@ -56,7 +56,7 @@ public class ReWriter {
         int[] currCount = new int[targets.size()];
 
         for (int i = 0; i < permutationCount; i++) {
-            permutations.add(reWriteAnalogy(rulesMap, AnalogyManager.ConvertToOOP(source.toString()),currCount,targets));
+            permutations.add(reWriteAnalogy(rulesMap,(Predicate) source.getDeepCopy(),currCount,targets));
             updatePermutation(currCount,currCount.length-1,maxCount);
         }
 

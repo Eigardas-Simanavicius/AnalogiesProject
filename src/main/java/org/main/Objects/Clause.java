@@ -62,7 +62,6 @@ public class Clause implements Predicate{
                         int counter = 1;
                         Predicate possibleParent = current.getParent();
                         while(next.getParent() != possibleParent){
-                            System.out.println(possibleParent.getName());
                             possibleParent = possibleParent.getParent();
                             counter++;
                         }

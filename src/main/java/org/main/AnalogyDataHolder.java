@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 // hold all the analogies, is incharge of parsing and what not
 public class AnalogyDataHolder {
 
-    private static final ConcurrentHashMap<String, ArrayList<String>> Analogies = new ConcurrentHashMap<>();
-    private static final Logger logger = Logger.getLogger(RewriteRule.class.getName());
-
+    private static final ConcurrentHashMap<String, ArrayList<String>> analogies = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer,ArrayList<String>> structureHash = new ConcurrentHashMap<>();
+    private static final Logger logger = Logger.getLogger(AnalogyDataHolder.class.getName());
     // setting up out threads
     public static void addAnalogiesFromFile(String filename, Config config) throws InterruptedException {
         if(config.getThreadsUsed() < 1){
@@ -57,7 +57,14 @@ public class AnalogyDataHolder {
         return counter;
     }
 
-    //the main function, each thread will read the their part of the file and work with the analogies
+    public static ConcurrentHashMap<String, ArrayList<String>> getAnalogies(){
+        return analogies;
+    }
+    public static ConcurrentHashMap<Integer, ArrayList<String>> getStructreHashes(){
+        return structureHash;
+    }
+
+    //the main function, each thread will read their part of the file and work with the analogies
     static class sortAnalogies extends Thread{
         String filename;
         int startLine;
@@ -91,29 +98,43 @@ public class AnalogyDataHolder {
 
         // intaking a line, and trying to get something useful out of it
         public static void processLine(String line,Config config){
+
             String[] arr = line.replace("\t","  ").split(" {2}");
             String topic = arr[0];
-            int length = 1;
-            int jump = 3;
-
-            if(!config.isAbstracts()){
-                jump = 2;
+            int jump = 4;
+            int lenght;
+            if(config.isRewrite()){
+                lenght =  2;
+            }else{
+                lenght = arr.length;
             }
 
-            if(!config.isRewrite()){
-                length = (arr.length-1)/jump;
+            for (int i = 1; i < lenght; i = i + jump) {
+                if (analogies.containsKey(topic)) {
+                    analogies.get(topic).add(arr[i]);
+                } else {
+                    analogies.put(topic, new ArrayList<String>());
+                    analogies.get(topic).add(arr[i]);
+                }
+                if (structureHash.containsKey(hashPredicate(arr[i]))) {
+                    structureHash.get(hashPredicate(arr[i])).add(arr[i]);
+                } else {
+                    structureHash.put(hashPredicate(arr[i]), new ArrayList<String>());
+                    structureHash.get(hashPredicate(arr[i])).add(arr[i]);
+                }
+
             }
 
-            for(int i = 1; i < arr.length-1; i = i + jump){
+            if(config.isRewrite()) {
+                ArrayList<String> rewrites = getRewrites(arr[1], config);
+                analogies.get(topic).addAll(rewrites);
 
-                if(Analogies.containsKey(topic)){
-                    Analogies.get(topic).add(arr[i]);
-                }else {
-                    Analogies.put(topic, new ArrayList<String>());
-                    Analogies.get(topic).add(arr[i]);
-                    if(config.isRewrite()){
-                        ArrayList<String> array =  getRewrites(arr[i],config);
-                        System.out.println();
+                for (String rewrite: rewrites){
+                    if (structureHash.containsKey(hashPredicate(rewrite))) {
+                        structureHash.get(hashPredicate(rewrite)).add(rewrite);
+                    } else {
+                        structureHash.put(hashPredicate(rewrite), new ArrayList<String>());
+                        structureHash.get(hashPredicate(rewrite)).add(rewrite);
                     }
                 }
             }
@@ -125,14 +146,14 @@ public class AnalogyDataHolder {
         private static ArrayList<String> getRewrites(String Source, Config config){
             ArrayList<String> re = new ArrayList<>();
             ArrayList<Predicate> preds = ReWriter.reWriteAnalogyAllPermutations(config.getRuleSet().getRuleForAnalogy(Source),AnalogyManager.ConvertToOOP(Source));
+            for(Predicate pred: preds){
+                re.add(pred.toString());
+            }
 
-            System.out.println(preds.getFirst().toString());
-            preds.getFirst().getAllChildren().forEach(f -> System.out.println(f.getName()));
-
-            return null;
+            return re;
         }
 
-        private int hashPredicate(String predicate){
+        private static int hashPredicate(String predicate){
             Clause pred = (Clause)AnalogyManager.ConvertToOOP(predicate);
             String abstractPred = AnalogyManager.convertToAbstractString(pred, false);
             return abstractPred.hashCode();
