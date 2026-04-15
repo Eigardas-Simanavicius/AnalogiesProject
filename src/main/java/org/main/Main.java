@@ -40,7 +40,9 @@ public class Main {
             //config = ConfigSetup.applyConfig(args[0]);
         }
         config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
+        System.out.println(config != null);
         AnalogyDataHolder.addAnalogiesFromFile(config.getAnalogiesFilePath(),config);
+        System.out.println(AnalogyDataHolder.getAnalogies());
 
 
     }

@@ -19,12 +19,13 @@ public class ConfigSetup {
             File configFile = new File(filepath);
             config = setupConfig(configFile);
         }catch (Exception e){
-           config = findConfig();
+           throw e;
         }
+        System.out.println(config != null);
         return config;
     }
 
-    public static Config findConfig(){
+    public static void findConfig(){
         Config config;
         try {
             File configFile = new File("config.txt");
@@ -34,19 +35,17 @@ public class ConfigSetup {
         }catch (Exception e){
 
         }
-        //return config;
-        return null;
+
+
     }
 
     private static Config createDefaultConfig(File configFile) throws IOException {
 
         logger.log(Level.WARNING, "No config found or provided, will create default file, empty by default,nothing will be loaded");
-        //return configFile.createNewFile();
         return null;
     }
 
     public static Config setupConfig(File configFile) {
-        System.out.println("here");
         Config config = new Config();
         try (Scanner myReader = new Scanner(configFile)) {
             while (myReader.hasNextLine()) {
@@ -59,7 +58,7 @@ public class ConfigSetup {
                 }else if(currLine[0].equals("rewrite")){
                     config.setRewrite(Boolean.parseBoolean(currLine[1]));
                 }else if(currLine[0].equals("targets")){
-                    config.setTargets((ArrayList<String>) Arrays.stream(currLine[1].split(",")).toList());
+                    config.setTargets( Arrays.asList(currLine[1].split(",")));
                 } else if (currLine[0].equals("jumps")) {
                     config.setJumps(Integer.parseInt(currLine[1]));
                 }

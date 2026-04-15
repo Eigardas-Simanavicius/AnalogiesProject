@@ -25,6 +25,7 @@ public class AnalogyDataHolder {
         try (BufferedReader br = new BufferedReader(new FileReader(config.getAnalogiesFilePath()))) {
             String line;
             while ((line = br.readLine()) != null) {
+                processLine(line,config);
             }
         } catch (IOException e) {
             System.out.println("Error reading file.");
@@ -36,7 +37,7 @@ public class AnalogyDataHolder {
     public static void processLine(String line, Config config) {
 
         String[] arr = line.replace("\t", "  ").split(" {2}");
-        if(config.getTargets().isEmpty() || !config.getTargets().isEmpty() && config.getTargets().contains(arr[0])) {
+        if(config.getTargets() == null || (!config.getTargets().isEmpty() && config.getTargets().contains(arr[0]))) {
             String topic = arr[0];
             int jump = config.getJumps();
             int length;
