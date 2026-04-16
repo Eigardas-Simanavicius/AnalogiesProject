@@ -1,5 +1,5 @@
 #as of now empty,will be filled later
 rewrite=false
-rules=/home/eigardas/Documents/Github/AnalogiesProject/testrules.txt
-analogies=/home/eigardas/Documents/Github/AnalogiesProject/structureddomains.txt
+rules=rewrite_rules.txt
+analogies=structureddomains.txt
 targets=AIDS,Adonis

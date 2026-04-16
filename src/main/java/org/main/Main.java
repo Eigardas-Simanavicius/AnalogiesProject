@@ -30,7 +30,6 @@ public class Main {
             System.out.println("failed config " + e.getMessage());
         }
 
-
         //Config Init
         // no given config
         Config config;
@@ -39,7 +38,7 @@ public class Main {
         }else{
             //config = ConfigSetup.applyConfig(args[0]);
         }
-        config = ConfigSetup.applyConfig("/home/eigardas/Documents/Github/AnalogiesProject/config.txt");
+        config = ConfigSetup.applyConfig("config.txt");
         System.out.println(config != null);
         AnalogyDataHolder.addAnalogiesFromFile(config.getAnalogiesFilePath(),config);
         System.out.println(AnalogyDataHolder.getAnalogies());

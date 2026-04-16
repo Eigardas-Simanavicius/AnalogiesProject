@@ -10,8 +10,8 @@ the source files can then be found at org/main
 *********************
 
 Config file works simply enough,
-it has a series of keyworks, when running the program you can specify the path to
-the config file you'd like it to use. If you dont provide one, it will try find
+it has a series of keywords, when running the program you can specify the path to
+the config file you'd like it to use. If you don't provide one, it will try to find
 config.txt, if it cant do that it will just make a new blank config.txt which you can modify.
 
 *********************
