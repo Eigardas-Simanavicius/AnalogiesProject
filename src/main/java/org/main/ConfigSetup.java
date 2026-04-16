@@ -21,7 +21,7 @@ public class ConfigSetup {
         }
         return config;
     }
-
+    // if no config was given we are going to try out best to find it
     public static Config findConfig(){
         Config config;
         try {
