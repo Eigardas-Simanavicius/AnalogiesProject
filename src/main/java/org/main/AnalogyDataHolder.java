@@ -111,7 +111,6 @@ public class AnalogyDataHolder {
     public static ArrayList<String> getMappableConcepts(String target){
         ArrayList<String> out = new ArrayList<>();
         ArrayList<String> targetAnalogies = analogies.get(target);
-
         for(String analogy : targetAnalogies){
             int hash = hashPredicate(analogy);
             ArrayList<String> sourceAnalogies = structuresHash.get(hash);
@@ -128,6 +127,15 @@ public class AnalogyDataHolder {
         }
 
         return out;
+    }
+
+    public static ArrayList<String> getAnalogiesFor(String analogy){
+        ArrayList<String> a = analogies.get(analogy);
+        if(a == null){
+            return new ArrayList<>();
+        }else{
+            return a;
+        }
     }
 
     private static String isolateTopic(String analogy){
@@ -148,15 +156,6 @@ public class AnalogyDataHolder {
     }
     public static HashMap<Integer, ArrayList<String>> getStructureHash(){
         return structuresHash;
-    }
-
-    public static ArrayList<String> getAnalogiesFor(String analogy){
-        ArrayList<String> a = analogies.get(analogy);
-        if(a == null){
-            return new ArrayList<>();
-        }else{
-            return a;
-        }
     }
 
 }

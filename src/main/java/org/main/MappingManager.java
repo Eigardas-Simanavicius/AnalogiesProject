@@ -128,6 +128,8 @@ public class MappingManager {
         return mapping;
     }
 
+
+
     public static ArrayList<Predicate> getMappableSourceAnalogiesFor(String targetTopic){
         ArrayList<String> sourceTopics = new ArrayList<>(AnalogyDataHolder.getMappableConcepts(targetTopic).stream().map(x -> x.replaceAll("\\*","")).toList());
 

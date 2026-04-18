@@ -13,7 +13,7 @@ import java.util.logging.*;
 
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args){
         //logger initialization
         Logger rootLogger = Logger.getLogger("");
         try{
