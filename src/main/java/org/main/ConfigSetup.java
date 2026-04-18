@@ -39,6 +39,7 @@ public class ConfigSetup {
  
     }
 
+    // creates a new default config to with some of the most important keywords
     private static Config createDefaultConfig(File configFile) throws IOException {
         Config newConfig = new Config();
         try {
