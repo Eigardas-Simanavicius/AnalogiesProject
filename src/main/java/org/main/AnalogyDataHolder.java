@@ -88,7 +88,6 @@ public class AnalogyDataHolder {
     // incase we need all the rewrites
     private static ArrayList<String> getRewrites(String Source, Config config) {
         ArrayList<String> re = new ArrayList<>();
-        System.out.println(Source + " changeing");
         ArrayList<Predicate> preds = ReWriter.reWriteAnalogyAllPermutations(config.getRuleSet().getRuleForAnalogy(Source), AnalogyManager.ConvertToOOP(Source));
         if (preds != null) {
             for (Predicate pred : preds) {

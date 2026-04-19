@@ -38,9 +38,7 @@ public class Main {
         }else{
             config = ConfigSetup.applyConfig(args[0]);
         }
-        System.out.println(config.getAnalogiesFilePath());
-
-        AnalogyDataHolder.addAnalogiesFromFile("structureddomains.txt", config);
+        AnalogyDataHolder.addAnalogiesFromFile(config.getAnalogiesFilePath(), config);
         ArrayList<String> topics = AnalogyDataHolder.getMappableConcepts("Adonis");
         System.out.println(topics);
 
