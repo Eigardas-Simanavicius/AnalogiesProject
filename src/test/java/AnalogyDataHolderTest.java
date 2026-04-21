@@ -30,7 +30,7 @@ public class AnalogyDataHolderTest {
 
     @Test
     public void checkIfAllRead(){
-        AnalogyDataHolder.addAnalogiesFromFile(testconfig.getAnalogiesFilePath(),testconfig);
+        AnalogyDataHolder.addAnalogiesFromFile(testconfig);
         HashMap<String, ArrayList<String>> analogiesRecieved = AnalogyDataHolder.getAnalogies();
         for(String key: analogiesRecieved.keySet()){
             assertEquals(analogies.get(key),analogiesRecieved.get(key));
@@ -40,7 +40,7 @@ public class AnalogyDataHolderTest {
     @Test
     public void checkStructureHash(){
         String newAnalogy = "(if (can (exercise.0 *Greg muscle)) (can (flex.0 *Greg muscle)))";
-        AnalogyDataHolder.addAnalogiesFromFile(testconfig.getAnalogiesFilePath(),testconfig);
+        AnalogyDataHolder.addAnalogiesFromFile(testconfig);
         HashMap<Integer, ArrayList<String>> structuresHash = AnalogyDataHolder.getStructureHash();
         assertEquals("(if (can (exercise.0 *Adonis muscle)) (can (flex.0 *Adonis muscle)))", structuresHash.get(AnalogyDataHolder.hashPredicate(newAnalogy)).getFirst());
     }

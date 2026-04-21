@@ -16,7 +16,7 @@ public class getMappableSourceAnalogiesForTest {
     @Before
     public void setup(){
         ConfigSetup.setupConfig(new File("config.txt"));
-        AnalogyDataHolder.addAnalogiesFromFile("structured domains.txt",new Config());
+        AnalogyDataHolder.addAnalogiesFromFile(new Config());
     }
 
     @Test

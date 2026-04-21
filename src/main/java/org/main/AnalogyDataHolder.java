@@ -22,7 +22,7 @@ public class AnalogyDataHolder {
     private static final Logger logger = Logger.getLogger(AnalogyDataHolder.class.getName());
 
     // must be run to load analogies, before running any other meaningful method in this class
-    public static void addAnalogiesFromFile(String filename, Config config){
+    public static void addAnalogiesFromFile(Config config){
         try (BufferedReader br = new BufferedReader(new FileReader(config.getAnalogiesFilePath()))) {
             String line;
             while ((line = br.readLine()) != null) {

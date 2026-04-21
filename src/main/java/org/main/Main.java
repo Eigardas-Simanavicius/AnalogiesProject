@@ -38,7 +38,7 @@ public class Main {
         }else{
             config = ConfigSetup.applyConfig(args[0]);
         }
-        AnalogyDataHolder.addAnalogiesFromFile(config.getAnalogiesFilePath(), config);
+        AnalogyDataHolder.addAnalogiesFromFile(config);
         ArrayList<String> topics = AnalogyDataHolder.getMappableConcepts("Adonis");
         System.out.println(topics);
 
