@@ -5,15 +5,14 @@ import org.main.Objects.Subject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompositeBuilder {
-    static HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
-    static HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
+    private static HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
+    private static HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
-    static HashMap<Subject, Subject> mainMap;
+    private static HashMap<Subject, Subject> mainMap;
 
     //runs N times, starting from the next highest richness value every time
     public static ArrayList<String> buildGreedyCompositeAnalogy(String source, String target, int N){
@@ -21,6 +20,7 @@ public class CompositeBuilder {
         ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
         sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
         targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
+        sanitizeInputAnalogies();
 
         ArrayList<String> compositeAnalogy = new ArrayList<>();
         mainMap = new HashMap<>(); //resets static hashmap of subjects
@@ -54,9 +54,7 @@ public class CompositeBuilder {
     }
 
     //makes sure there are no "unmappable" analogies in either set, by comparing structure richness
-    //An extra sanitation step might be necessary to check that they're mappable. Is it possible for two analogies to have the same richness but not be mappable?
     private static void sanitizeInputAnalogies(){
-
         for(Double key : sourceAnalogiesMap.keySet()){
             if(targetAnalogiesMap.get(key) == null){
                 sourceAnalogiesMap.remove(key);
@@ -89,8 +87,11 @@ public class CompositeBuilder {
     }
 
     private static boolean coalesce(String source, String target){
+        //mapAnalogies also checks if they two inputs are mappable, extra sanitation not needed
         HashMap<Subject, Subject> mapping = MappingManager.mapAnalogies(AnalogyManager.ConvertToOOP(source), AnalogyManager.ConvertToOOP(target));
-
+        if(mapping == null){
+            return false;
+        }
         for(Subject subject : mapping.keySet()){
             if(mainMap.get(subject) != null){
                 if(!(mapping.get(subject).equals(mainMap.get(subject)))){
