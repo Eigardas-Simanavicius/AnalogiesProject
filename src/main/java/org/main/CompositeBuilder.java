@@ -16,43 +16,73 @@ public class CompositeBuilder {
     private static HashMap<Subject, Subject> backwardMap;
 
     //runs N times, starting from the next highest richness value every time
-    public static ArrayList<String> buildGreedyCompositeAnalogy(String source, String target, int N){
-        ArrayList<String> sourceAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(source);
-        ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
-        sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
-        targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
-        sanitizeInputAnalogies();
+    public static ArrayList<String> buildCompositeAnalogy(String source, String target){
+        setup(source, target);
+        List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
+        return(searchOnce(index, 0));
+    }
 
-        ArrayList<String> compositeAnalogy = new ArrayList<>();
-        forwardMap = new HashMap<>(); //resets static hashmap of subjects
-        backwardMap = new HashMap<>();
-
-        List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList();
+    public static ArrayList<ArrayList<String>> buildMultipleCompositeAnalogies(String source, String target, int N){
+        setup(source, target);
+        List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
 
         if(N > index.size()){
             logger.log(Level.WARNING, "Requested more greedy runs than there are mappable analogies, defaulting to maximum possible value");
             N = index.size();
         }
 
+        ArrayList<ArrayList<String>> listOfComposites = new ArrayList<>();
+
+        for(int i = 0; i < N; i++){
+            listOfComposites.add(searchOnce(index, i));
+        }
+
+        return listOfComposites;
+    }
+
+    private static ArrayList<String> searchOnce(List<Double> index, int start){
+        ArrayList<String> compositeAnalogy = new ArrayList<>();
+        boolean wasReset = false;
+
         //Iterates over richness maps
-        for(int i = 0; i < index.size(); i++){
+        for (int i = start; i < index.size(); i++) {
+            //avoid adding duplicates
+            if(wasReset && i == start){
+                continue;
+            }
             double currIndex = index.get(i);
             ArrayList<String> currentSources = sourceAnalogiesMap.get(currIndex);
             ArrayList<String> currentTargets = targetAnalogiesMap.get(currIndex);
-            for(int j = 0; j < currentSources.size(); j++){
-                if(i >= currentTargets.size()){
+            for (int j = 0; j < currentSources.size(); j++) {
+                if (i >= currentTargets.size()) {
                     break;
                 }
                 //checks if two current analogies can be added to the composite, if yes then adds them (and adds all of their subject mappings to the subject map)
-                if(coalesce(currentSources.get(i), currentTargets.get(i))){
+                if (coalesce(currentSources.get(i), currentTargets.get(i))) {
                     compositeAnalogy.add(currentSources.get(i));
                     compositeAnalogy.add(currentTargets.get(i));
                 }
             }
+            //considers all analogies "above" the one we started with
+            //Since we're often starting with not the richest analogy, this goes back up the list and checks the richer ones as well.
+            if(!wasReset && start != 0){ //avoid resetting if we start at 0
+                i = -1;
+                wasReset = true;
+            }
         }
 
-
         return compositeAnalogy;
+    }
+
+    private static void setup(String source, String target){
+        ArrayList<String> sourceAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(source);
+        ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
+        sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
+        targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
+        sanitizeInputAnalogies();
+
+        forwardMap = new HashMap<>(); //resets static hashmap of subjects
+        backwardMap = new HashMap<>();
     }
 
     //makes sure there are no "unmappable" analogies in either set, by comparing structure richness
@@ -96,7 +126,7 @@ public class CompositeBuilder {
         }
 
         for(Subject subject : mapping.keySet()){
-            Subject secondSubject = mapping.get(subject);
+            Subject secondSubject = backwardMap.get(subject);
             if(secondSubject != null){
                 //Checks that subject from analogy set 1 always maps to the same subject in analogy set 2. Also checks that subjects from set 2 always map to the same subject in set 1
                 if(!(secondSubject.equals(forwardMap.get(subject))) || !(subject.equals(backwardMap.get(secondSubject)))){

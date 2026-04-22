@@ -24,7 +24,7 @@ public class CompositeBuilderTest {
 
     @Test
     public void simpleTest(){
-        System.out.println(CompositeBuilder.buildGreedyCompositeAnalogy("Adonis", "barbarian", 0));
+        System.out.println(CompositeBuilder.buildCompositeAnalogy("Adonis", "barbarian"));
         assertTrue(true);
     }
 }
