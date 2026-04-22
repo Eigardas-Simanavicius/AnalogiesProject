@@ -12,7 +12,8 @@ public class CompositeBuilder {
     private static HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
     private static HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
-    private static HashMap<Subject, Subject> mainMap;
+    private static HashMap<Subject, Subject> forwardMap;
+    private static HashMap<Subject, Subject> backwardMap;
 
     //runs N times, starting from the next highest richness value every time
     public static ArrayList<String> buildGreedyCompositeAnalogy(String source, String target, int N){
@@ -23,7 +24,8 @@ public class CompositeBuilder {
         sanitizeInputAnalogies();
 
         ArrayList<String> compositeAnalogy = new ArrayList<>();
-        mainMap = new HashMap<>(); //resets static hashmap of subjects
+        forwardMap = new HashMap<>(); //resets static hashmap of subjects
+        backwardMap = new HashMap<>();
 
         List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList();
 
@@ -92,16 +94,20 @@ public class CompositeBuilder {
         if(mapping == null){
             return false;
         }
+
         for(Subject subject : mapping.keySet()){
-            if(mainMap.get(subject) != null){
-                if(!(mapping.get(subject).equals(mainMap.get(subject)))){
+            Subject secondSubject = mapping.get(subject);
+            if(secondSubject != null){
+                //Checks that subject from analogy set 1 always maps to the same subject in analogy set 2. Also checks that subjects from set 2 always map to the same subject in set 1
+                if(!(secondSubject.equals(forwardMap.get(subject))) || !(subject.equals(backwardMap.get(secondSubject)))){
                     return false;
                 }
             }
         }
 
         for(Subject subject : mapping.keySet()){
-            mainMap.put(subject, mapping.get(subject));
+            forwardMap.put(subject, mapping.get(subject));
+            backwardMap.put(mapping.get(subject), subject);
         }
         return true;
     }
