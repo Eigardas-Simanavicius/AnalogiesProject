@@ -138,8 +138,8 @@ public class CompositeBuilder {
 
         for(Subject subject : mapping.keySet()){
             String subjectName = subject.getName();
-            this.forwardMap.put(subjectName, mapping.get(subject).getName());
-            this.backwardMap.put(mapping.get(subject).getName(), subjectName);
+            this.forwardMap.put(subjectName.intern(), mapping.get(subject).getName().intern());
+            this.backwardMap.put(mapping.get(subject).getName().intern(), subjectName.intern());
         }
         return true;
     }

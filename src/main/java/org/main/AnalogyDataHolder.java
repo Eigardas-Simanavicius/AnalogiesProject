@@ -87,10 +87,10 @@ public class AnalogyDataHolder {
 
     public static void addAnalogyToHash(String analogy,String topic){
         if (analogies.containsKey(topic)) {
-            analogies.get(topic).add(analogy);
+            analogies.get(topic).add(analogy.intern());
         } else {
             analogies.put(topic, new ArrayList<String>());
-            analogies.get(topic).add(analogy);
+            analogies.get(topic).add(analogy.intern());
         }
 
         if (structuresHash.containsKey(hashPredicate(analogy))) {

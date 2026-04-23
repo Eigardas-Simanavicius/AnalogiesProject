@@ -65,4 +65,6 @@ public class CompositeBuilderTest {
         assertEquals(4, composite.size());
         assertTrue(!composite.contains("(can creature (get_lost finding *location))"));
     }
+
+
 }
