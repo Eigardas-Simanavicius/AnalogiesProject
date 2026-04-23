@@ -17,7 +17,8 @@ public class CoalescentMapping {
     public CoalescentMapping(String source,String target){
         this.source = source;
         this.traget = target;
-        compositeAnalogy = CompositeBuilder.buildCompositeAnalogy(source,target);
+
+        compositeAnalogy = new CompositeBuilder().buildCompositeAnalogy(source,target);
         richness = MappingManager.getMappingRichness(compositeAnalogy);
     }
 

@@ -9,22 +9,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompositeBuilder {
-    private static HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
-    private static HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
+    private HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
+    private HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
-    private static HashMap<Subject, Subject> forwardMap;
-    private static HashMap<Subject, Subject> backwardMap;
+    private HashMap<String, String> forwardMap;
+    private HashMap<String, String> backwardMap;
 
     //runs N times, starting from the next highest richness value every time
-    public static ArrayList<String> buildCompositeAnalogy(String source, String target){
+    public ArrayList<String> buildCompositeAnalogy(String source, String target){
         setup(source, target);
-        List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
+        List<Double> index = this.sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
         return(searchOnce(index, 0));
     }
 
-    public static ArrayList<ArrayList<String>> buildMultipleCompositeAnalogies(String source, String target, int N){
+    public ArrayList<ArrayList<String>> buildMultipleCompositeAnalogies(String source, String target, int N){
         setup(source, target);
-        List<Double> index = sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
+        List<Double> index = this.sourceAnalogiesMap.keySet().stream().sorted().toList(); //controls which source analogy is currently being looked at
 
         if(N > index.size()){
             logger.log(Level.WARNING, "Requested more greedy runs than there are mappable analogies, defaulting to maximum possible value");
@@ -40,7 +40,7 @@ public class CompositeBuilder {
         return listOfComposites;
     }
 
-    private static ArrayList<String> searchOnce(List<Double> index, int start){
+    private ArrayList<String> searchOnce(List<Double> index, int start){
         ArrayList<String> compositeAnalogy = new ArrayList<>();
         boolean wasReset = false;
 
@@ -51,8 +51,8 @@ public class CompositeBuilder {
                 continue;
             }
             double currIndex = index.get(i);
-            ArrayList<String> currentSources = sourceAnalogiesMap.get(currIndex);
-            ArrayList<String> currentTargets = targetAnalogiesMap.get(currIndex);
+            ArrayList<String> currentSources = this.sourceAnalogiesMap.get(currIndex);
+            ArrayList<String> currentTargets = this.targetAnalogiesMap.get(currIndex);
             for (int j = 0; j < currentSources.size(); j++) {
                 if (j >= currentTargets.size()) {
                     break;
@@ -74,27 +74,27 @@ public class CompositeBuilder {
         return compositeAnalogy;
     }
 
-    private static void setup(String source, String target){
+    private void setup(String source, String target){
         ArrayList<String> sourceAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(source);
         ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
-        sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
-        targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
+        this.sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
+        this.targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
         sanitizeInputAnalogies();
 
-        forwardMap = new HashMap<>(); //resets static hashmap of subjects
-        backwardMap = new HashMap<>();
+        this.forwardMap = new HashMap<>(); //resets static hashmap of subjects
+        this.backwardMap = new HashMap<>();
     }
 
     //makes sure there are no "unmappable" analogies in either set, by comparing structure richness
-    private static void sanitizeInputAnalogies(){
-        for(Double key : sourceAnalogiesMap.keySet()){
-            if(targetAnalogiesMap.get(key) == null){
-                sourceAnalogiesMap.remove(key);
+    private void sanitizeInputAnalogies(){
+        for(Double key : this.sourceAnalogiesMap.keySet()){
+            if(this.targetAnalogiesMap.get(key) == null){
+                this.sourceAnalogiesMap.remove(key);
             }
         }
-        for(Double key : targetAnalogiesMap.keySet()){
-            if(sourceAnalogiesMap.get(key) == null){
-                targetAnalogiesMap.remove(key);
+        for(Double key : this.targetAnalogiesMap.keySet()){
+            if(this.sourceAnalogiesMap.get(key) == null){
+                this.targetAnalogiesMap.remove(key);
             }
         }
 
@@ -118,7 +118,7 @@ public class CompositeBuilder {
         return richnessMap;
     }
 
-    private static boolean coalesce(String source, String target){
+    private boolean coalesce(String source, String target){
         //mapAnalogies also checks if they two inputs are mappable, extra sanitation not needed
         HashMap<Subject, Subject> mapping = MappingManager.mapAnalogies(AnalogyManager.ConvertToOOP(source), AnalogyManager.ConvertToOOP(target));
         if(mapping == null){
@@ -126,18 +126,20 @@ public class CompositeBuilder {
         }
 
         for(Subject subject : mapping.keySet()){
-            Subject secondSubject = backwardMap.get(subject);
-            if(secondSubject != null){
+            String firstSubject = subject.getName();
+            String secondSubject = mapping.get(subject).getName();
+            if(forwardMap.get(firstSubject) != null){
                 //Checks that subject from analogy set 1 always maps to the same subject in analogy set 2. Also checks that subjects from set 2 always map to the same subject in set 1
-                if(!(secondSubject.equals(forwardMap.get(subject))) || !(subject.equals(backwardMap.get(secondSubject)))){
+                if(!(secondSubject.equals(this.forwardMap.get(firstSubject))) || !(firstSubject.equals(this.backwardMap.get(secondSubject)))){
                     return false;
                 }
             }
         }
 
         for(Subject subject : mapping.keySet()){
-            forwardMap.put(subject, mapping.get(subject));
-            backwardMap.put(mapping.get(subject), subject);
+            String subjectName = subject.getName();
+            this.forwardMap.put(subjectName, mapping.get(subject).getName());
+            this.backwardMap.put(mapping.get(subject).getName(), subjectName);
         }
         return true;
     }
