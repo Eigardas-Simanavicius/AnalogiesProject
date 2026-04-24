@@ -3,6 +3,7 @@ package org.main;
 import org.main.Objects.Subject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 public class CompositeBuilder {
     private HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
     private HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
+    private HashMap<Integer, ArrayList<Pair>> pairMap = null;
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
     private HashMap<String, String> forwardMap;
     private HashMap<String, String> backwardMap;
@@ -34,7 +36,10 @@ public class CompositeBuilder {
         ArrayList<ArrayList<String>> listOfComposites = new ArrayList<>();
 
         for(int i = 0; i < N; i++){
-            listOfComposites.add(searchOnce(index, i));
+            ArrayList<String> arr = searchOnce(index, i);
+            if(arr != null) {
+                listOfComposites.add(arr);
+            }
         }
 
         return listOfComposites;
@@ -42,6 +47,7 @@ public class CompositeBuilder {
 
     private ArrayList<String> searchOnce(List<Double> index, int start){
         ArrayList<String> compositeAnalogy = new ArrayList<>();
+        ArrayList<Pair> mappingPairs = new ArrayList<>();
         boolean wasReset = false;
 
         //Iterates over richness maps
@@ -71,7 +77,11 @@ public class CompositeBuilder {
             }
         }
 
-        return compositeAnalogy;
+        if(notDuplicate()) {
+            return compositeAnalogy;
+        }else {
+            return null;
+        }
     }
 
     private void setup(String source, String target){
@@ -79,6 +89,7 @@ public class CompositeBuilder {
         ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
         this.sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
         this.targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
+        pairMap = new HashMap<>();
         sanitizeInputAnalogies();
 
         this.forwardMap = new HashMap<>(); //resets static hashmap of subjects
@@ -144,5 +155,44 @@ public class CompositeBuilder {
         return true;
     }
 
+    private boolean notDuplicate(){
+        return false;
+    }
+    // the two mapping can only be the same if both pairs have the same hash so to speak, we will use this to wittle down our options
+    private int pairValue(ArrayList<Pair> mapping){
+        int total = 0;
+        for(Pair pair: mapping){
+            total += pair.source;
+        }
+        return total;
+    }
 
+
+    // represent the pair the two analogies mapped together, the numbers representing their location in their respective analogies arralists
+    private class Pair{
+        int source;
+        int target;
+
+        public Pair(int s, int t){
+            source = s;
+            target = t;
+        }
+        public int getSource(){
+            return source;
+        }
+        public int getTarget(){
+            return target;
+        }
+
+    }
+
+    private class sortPairs implements Comparator{
+
+        @Override
+        public int compare(Object t1, Object t2) {
+            Pair a = (Pair) t1;
+            Pair b = (Pair) t2;
+            return Integer.compare(a.getSource(), b.getSource());
+        }
+    }
 }
