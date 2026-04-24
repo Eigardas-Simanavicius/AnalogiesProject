@@ -1,5 +1,6 @@
 package org.main;
 
+import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Subject;
 
 import java.util.ArrayList;
@@ -221,5 +222,21 @@ public class CompositeBuilder {
             Pair b = (Pair) t2;
             return Integer.compare(a.getSource(), b.getSource());
         }
+    }
+
+    public ArrayList<String> getNBestSourcesFor(String targetTopic, int n){
+        ArrayList<CoalescentMapping> sourceTopicMappings = new ArrayList<>(AnalogyDataHolder
+                .getMappableConcepts(targetTopic)
+                .parallelStream()
+                .map(
+                    x -> new CoalescentMapping(x,targetTopic)
+                )
+                .toList()
+        );
+
+        sourceTopicMappings.sort(Comparator.comparingDouble(CoalescentMapping::getRichness));
+
+
+        return new ArrayList<>(sourceTopicMappings.stream().limit(n).map(CoalescentMapping::getSource).toList());
     }
 }

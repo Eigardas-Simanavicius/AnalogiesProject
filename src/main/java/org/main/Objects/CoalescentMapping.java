@@ -8,20 +8,22 @@ import java.util.HashMap;
 
 public class CoalescentMapping {
 
-    String source;
-    String traget;
-    private int richness;
+    private String source;
+    private String target;
+    private final int richness;
     ArrayList<String> compositeAnalogy;
     HashMap<String,String> mapping;
 
     public CoalescentMapping(String source,String target){
         this.source = source;
-        this.traget = target;
+        this.target = target;
 
         compositeAnalogy = new CompositeBuilder().buildCompositeAnalogy(source,target);
         richness = MappingManager.getMappingRichness(compositeAnalogy);
     }
 
+    public String getSource(){return source;}
+    public String getTarget(){return target;}
 
     public int getRichness() {
         return richness;

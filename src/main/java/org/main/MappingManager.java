@@ -130,8 +130,6 @@ public class MappingManager {
         return mapping;
     }
 
-
-
     public static ArrayList<Predicate> getMappableSourceAnalogiesFor(String targetTopic){
         // Gets analogies for the target topic
         final ArrayList<Predicate> targetAnalogies = new ArrayList<>(
