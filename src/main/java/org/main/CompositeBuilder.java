@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompositeBuilder {
-    private HashMap<Double, ArrayList<String>> sourceAnalogiesMap = new HashMap<>();
-    private HashMap<Double, ArrayList<String>> targetAnalogiesMap = new HashMap<>();
-    private HashMap<Integer, ArrayList<Pair>> pairMap = null;
+    private ConcurrentHashMap<Double, ArrayList<String>> sourceAnalogiesMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Double, ArrayList<String>> targetAnalogiesMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, ArrayList<Pair>> pairMap = null;
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
     private HashMap<String, String> forwardMap;
     private HashMap<String, String> backwardMap;
@@ -117,7 +118,7 @@ public class CompositeBuilder {
         ArrayList<String> targetAnalogiesArr = AnalogyDataHolder.getAnalogiesFor(target);
         this.sourceAnalogiesMap = mapByRichness(sourceAnalogiesArr);
         this.targetAnalogiesMap = mapByRichness(targetAnalogiesArr);
-        pairMap = new HashMap<>();
+        pairMap = new ConcurrentHashMap<>();
         sanitizeInputAnalogies();
 
         this.forwardMap = new HashMap<>(); //resets static hashmap of subjects
@@ -139,8 +140,8 @@ public class CompositeBuilder {
 
     }
 
-    private static HashMap<Double, ArrayList<String>> mapByRichness(ArrayList<String> inputAnalogies){
-        HashMap<Double, ArrayList<String>> richnessMap = new HashMap<>();
+    private static ConcurrentHashMap<Double, ArrayList<String>> mapByRichness(ArrayList<String> inputAnalogies){
+        ConcurrentHashMap<Double, ArrayList<String>> richnessMap = new ConcurrentHashMap<>();
         for(String analogy : inputAnalogies){
             double richness = AnalogyManager.getPredicateRichness(AnalogyManager.ConvertToOOP(analogy));
             ArrayList<String> arr;
@@ -224,7 +225,10 @@ public class CompositeBuilder {
         }
     }
 
-    public ArrayList<String> getNBestSourcesFor(String targetTopic, int n){
+    public static ArrayList<String> getNBestSourcesFor(String targetTopic, int n){
+        if(n <= 0)return new ArrayList<>();
+        if(targetTopic.isBlank()) return new ArrayList<>();
+
         ArrayList<CoalescentMapping> sourceTopicMappings = new ArrayList<>(AnalogyDataHolder
                 .getMappableConcepts(targetTopic)
                 .parallelStream()
