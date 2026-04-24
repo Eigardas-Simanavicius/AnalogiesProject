@@ -41,12 +41,5 @@ public class Main {
         }
 
 
-        AnalogyDataHolder.addAnalogyToHash("(if (can (exercise.0 *Greg muscle)) (can (flex.0 *Greg muscle)))");
-        AnalogyDataHolder.addAnalogyToHash("(be *Jeff beta)");
-        AnalogyDataHolder.addAnalogyToHash("(be *Greg sigma)");
-        AnalogyDataHolder.addAnalogyToHash("(if (can (exercise.0 *Jeff legs)) (can (flex.0 *Jeff legs)))");
-        ArrayList<ArrayList<String>> stuff = new CompositeBuilder().buildMultipleCompositeAnalogies("Greg","Jeff",2);
-        System.out.println(stuff.toString());
-
     }
 }

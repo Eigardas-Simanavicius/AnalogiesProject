@@ -24,7 +24,6 @@ public class CompositeBuilderTest {
 
     }
 
-
     @Test
     public void simpleTest(){
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
@@ -66,5 +65,16 @@ public class CompositeBuilderTest {
         assertTrue(!composite.contains("(can creature (get_lost finding *location))"));
     }
 
+    //put simple multiple searches test here
 
+    //put N > mappable analogies test here
+
+    @Test
+    public void diffNumAnalogiesForSameRichnessLevel(){
+        AnalogyDataHolder.addAnalogyToHash("(be *Jeff beta)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Greg sigma)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Greg Delta)");
+        ArrayList<ArrayList<String>> composite = new CompositeBuilder().buildMultipleCompositeAnalogies("Greg","Jeff",2);
+        assertEquals(2, composite.size());
+    }
 }
