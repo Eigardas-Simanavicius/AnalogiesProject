@@ -40,6 +40,12 @@ public class Main {
             config = ConfigSetup.applyConfig(args[0]);
         }
 
+        AnalogyDataHolder.addAnalogyToHash("(be *Jeff beta)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Greg sigma)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Greg Delta)");
+        ArrayList<ArrayList<String>> composite = new CompositeBuilder().buildMultipleCompositeAnalogies("Greg","Jeff",2);
+        System.out.println(composite + " " + composite.size());
+
 
     }
 }

@@ -130,4 +130,15 @@ public class CompositeBuilderTest {
         assertEquals(2, composite.size());
     }
 
+    @Test
+    public void avoidDuplicates(){
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bob muscle))");
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bill muscle))");
+        AnalogyDataHolder.addAnalogyToHash("(be *Bill sigma)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Bob delta)");
+        CompositeBuilder comp = new CompositeBuilder();
+        ArrayList<ArrayList<String>> source = comp.buildMultipleCompositeAnalogies("Bill","Bob",4);
+        assertEquals(1, source.size());
+    }
+
 }

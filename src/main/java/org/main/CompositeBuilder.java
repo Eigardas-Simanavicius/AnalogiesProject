@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class CompositeBuilder {
     private ConcurrentHashMap<Double, ArrayList<String>> sourceAnalogiesMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Double, ArrayList<String>> targetAnalogiesMap = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Integer, ArrayList<Pair>> pairMap = null;
+    private ConcurrentHashMap<Double, ArrayList<ArrayList<Pair>>> pairMap = null;
     private static final Logger logger = Logger.getLogger(CompositeBuilder.class.getName());
     private HashMap<String, String> forwardMap;
     private HashMap<String, String> backwardMap;
@@ -55,7 +55,7 @@ public class CompositeBuilder {
                 listOfComposites.add(arr);
             }
         }
-
+        pairMap.clear();
         return listOfComposites;
     }
 
@@ -92,6 +92,7 @@ public class CompositeBuilder {
                 if (coalesce(currentSources.get(j), currentTargets.get(j-startJ))) {
                     compositeAnalogy.add(currentSources.get(j));
                     compositeAnalogy.add(currentTargets.get(j-startJ));
+                    mappingPairs.add(new Pair(currIndex,j));
                 }
             }
             //considers all analogies "above" the one we started with
@@ -102,17 +103,13 @@ public class CompositeBuilder {
             }
         }
 
-        return compositeAnalogy;
 
-        //commented out temporarily because it just makes it return null 100% of the time
-        /*
-        if(notDuplicate()) {
+        if(notDuplicate(mappingPairs)) {
             return compositeAnalogy;
         }else {
             return null;
         }
 
-         */
     }
 
     private void setup(String source, String target){
@@ -186,44 +183,81 @@ public class CompositeBuilder {
         return true;
     }
 
-    private boolean notDuplicate(){
-        return false;
+    private boolean notDuplicate(ArrayList<Pair> mappingPairs){
+        double hash = pairValue(mappingPairs);
+        if(!pairMap.containsKey(hash)){
+            pairMap.put(hash,new ArrayList<>());
+            pairMap.get(hash).add(mappingPairs);
+            return true;
+        }else{
+            if(checkIfDuplicate(mappingPairs,pairMap.get(hash))){
+                return false;
+            }else{
+                pairMap.get(hash).add(mappingPairs);
+                return true;
+            }
+        }
     }
     // the two mapping can only be the same if both pairs have the same hash so to speak, we will use this to wittle down our options
-    private int pairValue(ArrayList<Pair> mapping){
-        int total = 0;
+    private double pairValue(ArrayList<Pair> mapping){
+        double total = 0;
         for(Pair pair: mapping){
-            total += pair.source;
+            total += pair.getRichness();
         }
         return total;
+    }
+
+    // this will check the new pairList against any exisitng to ones to make sure the new one is unique
+    private boolean checkIfDuplicate(ArrayList<Pair> mappingPairs,ArrayList<ArrayList<Pair>> possibleDuplicates){
+        Comparator<Pair> comparator = new sortPairs();
+        mappingPairs.sort(comparator);
+        boolean isDuplicate = true;
+        for(ArrayList<Pair> list : possibleDuplicates) {
+            if (list.size() == mappingPairs.size()) {
+                isDuplicate = true;
+                list.sort(comparator);
+                for (int i = 0; i < mappingPairs.size(); i++) {
+                    if(!mappingPairs.get(i).equals(list.get(i))){
+                        isDuplicate = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return isDuplicate;
     }
 
 
     // represent the pair the two analogies mapped together, the numbers representing their location in their respective analogies arralists
     private class Pair{
-        int source;
+        double richness;
         int target;
 
-        public Pair(int s, int t){
-            source = s;
+        public Pair(Double s, int t){
+            richness = s;
             target = t;
         }
-        public int getSource(){
-            return source;
+        public double getRichness(){
+            return richness;
         }
         public int getTarget(){
             return target;
         }
 
+        public boolean equals(Pair p){
+            return this.richness == p.getRichness() && this.target == p.getTarget();
+        }
+        public String toString(){
+            return "<" + richness + " " + target + ">";
+        }
     }
 
-    private class sortPairs implements Comparator{
+    private class sortPairs implements Comparator<Pair>{
 
         @Override
-        public int compare(Object t1, Object t2) {
-            Pair a = (Pair) t1;
-            Pair b = (Pair) t2;
-            return Integer.compare(a.getSource(), b.getSource());
+        public int compare(Pair a, Pair b) {
+            return Double.compare(a.getRichness(), b.getRichness());
+
         }
     }
 
