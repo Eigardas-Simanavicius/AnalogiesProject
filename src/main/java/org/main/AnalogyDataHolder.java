@@ -124,7 +124,10 @@ public class AnalogyDataHolder {
     //for every analogy containing the target, find all analogies with matching structures, isolate the subject in them, add the subject to the output
     public static ArrayList<String> getMappableConcepts(String target){
         ArrayList<String> out = new ArrayList<>();
-        ArrayList<String> targetAnalogies = analogies.get(target);
+        ArrayList<String> targetAnalogies = analogies.getOrDefault(target,new ArrayList<>());
+
+
+
         for(String analogy : targetAnalogies){
             int hash = hashPredicate(analogy);
             ArrayList<String> sourceAnalogies = structuresHash.get(hash);
