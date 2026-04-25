@@ -23,7 +23,7 @@ public class getNBestSourcesForTest {
     public void basicTest1(){
         long s = System.currentTimeMillis();
         ArrayList<String> c = CompositeBuilder.getNBestSourcesFor("AIDS",10);
-        System.out.println((System.currentTimeMillis()-s)/1000.0);
+        System.out.println("Fake Input Test 1 : " + (System.currentTimeMillis()-s)/1000.0);
         assertEquals(10,c.size());
         assertFalse(c.contains(null));
     }
@@ -32,7 +32,7 @@ public class getNBestSourcesForTest {
     public void basicTest2(){
         long s = System.currentTimeMillis();
         ArrayList<String> c = CompositeBuilder.getNBestSourcesFor("Adonis",30);
-        System.out.println((System.currentTimeMillis()-s)/1000.0);
+        System.out.println("Basic Input Test 2 : " + (System.currentTimeMillis()-s)/1000.0);
         assertEquals(30,c.size());
         assertFalse(c.contains(null));
     }
@@ -41,7 +41,7 @@ public class getNBestSourcesForTest {
     public void largeRequestTest(){
         long s = System.currentTimeMillis();
         ArrayList<String> c = CompositeBuilder.getNBestSourcesFor("AIDS",100000000);
-        System.out.println((System.currentTimeMillis()-s)/1000.0);
+        System.out.println("Large Request Test : " + (System.currentTimeMillis()-s)/1000.0);
         assertTrue(AnalogyDataHolder.getAnalogies().size()>c.size());
         assertFalse(c.contains(null));
     }
@@ -50,7 +50,7 @@ public class getNBestSourcesForTest {
     public void fakeInputTest(){
         long s = System.currentTimeMillis();
         ArrayList<String> c = CompositeBuilder.getNBestSourcesFor("FakeTopicAlert",100000000);
-        System.out.println((System.currentTimeMillis()-s)/1000.0);
+        System.out.println("Fake Input Test : " + (System.currentTimeMillis()-s)/1000.0);
         assertEquals(0,c.size());
         assertFalse(c.contains(null));
     }
@@ -59,7 +59,7 @@ public class getNBestSourcesForTest {
     public void blankInputTest(){
         long s = System.currentTimeMillis();
         ArrayList<String> c = CompositeBuilder.getNBestSourcesFor("",100000000);
-        System.out.println((System.currentTimeMillis()-s)/1000.0);
+        System.out.println("Blank Input Test : " + (System.currentTimeMillis()-s)/1000.0);
         assertEquals(0,c.size());
         assertFalse(c.contains(null));
     }
