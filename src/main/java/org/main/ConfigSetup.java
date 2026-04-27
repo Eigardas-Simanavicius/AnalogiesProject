@@ -76,4 +76,14 @@ public class ConfigSetup {
 
         return config;
     }
+
+    public static void clearConfig(){
+        Config config = new Config();
+
+        config.setTargets(null);
+        config.setAnalogiesFilePath(null);
+        config.setJumps(3);
+        config.setRewrite(false);
+        config.setRuleSet(null);
+    }
 }

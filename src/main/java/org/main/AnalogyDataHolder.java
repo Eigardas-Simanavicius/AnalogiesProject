@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 // hold all the analogies, is incharge of parsing and what not
 public class AnalogyDataHolder {
 
-    private static final HashMap<String, ArrayList<String>> analogies = new HashMap<>(); //maps topics to analogies about them
-    private static final HashMap<Integer, ArrayList<String>> structuresHash = new HashMap<>(); //maps structure hashes to analogies in the form of that structure
+    private static HashMap<String, ArrayList<String>> analogies = new HashMap<>(); //maps topics to analogies about them
+    private static HashMap<Integer, ArrayList<String>> structuresHash = new HashMap<>(); //maps structure hashes to analogies in the form of that structure
     private static final Logger logger = Logger.getLogger(AnalogyDataHolder.class.getName());
 
     // must be run to load analogies, before running any other meaningful method in this class
@@ -173,6 +173,11 @@ public class AnalogyDataHolder {
     }
     public static HashMap<Integer, ArrayList<String>> getStructureHash(){
         return structuresHash;
+    }
+
+    public static void clearData(){
+        analogies = new HashMap<>();
+        structuresHash = new HashMap<>();
     }
 
 }
