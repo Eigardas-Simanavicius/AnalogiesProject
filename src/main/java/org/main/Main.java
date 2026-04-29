@@ -1,16 +1,9 @@
 package org.main;
 
-import org.main.Interfaces.AnalogicalObject;
-import org.main.Interfaces.Predicate;
-import org.main.Objects.Clause;
 import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Config;
-import org.main.Objects.RewriteRule;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.logging.*;
 
 
@@ -44,7 +37,7 @@ public class Main {
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         CoalescentMapping mapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
-        System.out.println(mapping.getMapping());
+        System.out.println(mapping.getAnalogies());
 
     }
 }

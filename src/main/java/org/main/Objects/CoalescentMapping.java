@@ -11,20 +11,20 @@ public class CoalescentMapping {
     private String source;
     private String target;
     private final double richness;
-    ArrayList<String> compositeAnalogy;
-    HashMap<String,String> mapping;
+    private ArrayList<String> analogies;
+    private HashMap<String,String> mapping;
 
     public CoalescentMapping(String source,String target){
         this.source = source;
         this.target = target;
 
-        compositeAnalogy = new CompositeBuilder().buildCompositeAnalogy(source,target);
-        richness = MappingManager.getMappingRichness(compositeAnalogy);
+        analogies = new CompositeBuilder().buildCompositeAnalogy(source,target);
+        richness = MappingManager.getMappingRichness(analogies);
     }
 
     public String getSource(){return source;}
     public String getTarget(){return target;}
-    public ArrayList<String> getMapping(){return compositeAnalogy;}
+    public ArrayList<String> getAnalogies(){return analogies;}
     public double getRichness() {
         return richness;
     }

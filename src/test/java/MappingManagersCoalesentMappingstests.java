@@ -30,7 +30,7 @@ public class MappingManagersCoalesentMappingstests {
         string.add("(if (train.0 *Adonis body) (display *Adonis body))");
         string.add("(if (train.0 *barbarian self) (display *barbarian self))");
         CoalescentMapping mapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
-        assertEquals(mapping.getMapping(), string);
+        assertEquals(mapping.getAnalogies(), string);
     }
 
     @After
