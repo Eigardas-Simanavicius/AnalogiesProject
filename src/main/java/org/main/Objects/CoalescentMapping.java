@@ -10,7 +10,7 @@ public class CoalescentMapping {
 
     private String source;
     private String target;
-    private final int richness;
+    private final double richness;
     ArrayList<String> compositeAnalogy;
     HashMap<String,String> mapping;
 
@@ -25,7 +25,7 @@ public class CoalescentMapping {
     public String getSource(){return source;}
     public String getTarget(){return target;}
     public ArrayList<String> getMapping(){return compositeAnalogy;}
-    public int getRichness() {
+    public double getRichness() {
         return richness;
     }
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class MappingManager {
+
     private static HashMap<String,ArrayList<CoalescentMapping>> coalesentMappings = new HashMap<>();
 
     public static Boolean canMap(Predicate head1, Predicate head2){
@@ -197,12 +198,18 @@ public class MappingManager {
         return (s1.toCharArray()[0] == '*') == (s2.toCharArray()[0] == '*');
     }
 
-    public static int getMappingRichness(ArrayList<String> mapping){
-        int richness = 0;
-        for (int i = 0; i < mapping.size(); i+=2) {
-            richness += flatStringMapping(mapping.get(i),mapping.get(i+1)).size();
-        }
-        return richness;
+    public static double getMappingRichness(ArrayList<String> mapping){
+        return getMappingRichness(mapping,3);
+    }
+
+    private static double getMappingRichness(ArrayList<String> mapping, double beta){
+        return mapping.stream().map(
+                (String x) ->
+                        Math.pow(
+                        AnalogyManager.getPredicateRichness(AnalogyManager.ConvertToOOP(x))
+                        ,beta
+                )
+        ).reduce(0.0, Double::sum);
     }
 
     public static CoalescentMapping createNewCoalesentMapping(String source, String target){
@@ -218,7 +225,7 @@ public class MappingManager {
         CompositeBuilder compBuilder = new CompositeBuilder();
         ArrayList<ArrayList<String>> mappings = compBuilder.buildMultipleCompositeAnalogies(source,target,5);
         mappings.sort(
-                Comparator.comparingInt(MappingManager::getMappingRichness)
+                Comparator.comparingDouble(MappingManager::getMappingRichness)
         );
         return mappings;
     }
@@ -226,7 +233,7 @@ public class MappingManager {
     public static ArrayList<CoalescentMapping> rankBestCoalesentMapping(String source){
         ArrayList<CoalescentMapping> mappings = coalesentMappings.get(source);
         mappings.sort(
-                Comparator.comparingInt(CoalescentMapping::getRichness)
+                Comparator.comparingDouble(CoalescentMapping::getRichness)
         );
         return mappings;
     }
