@@ -226,7 +226,7 @@ public class MappingManager {
 
     public static ArrayList<ArrayList<String>>  rankBestAnalogiesSingleTarget(String source, String target){
         CompositeBuilder compBuilder = new CompositeBuilder();
-        ArrayList<ArrayList<String>> mappings = compBuilder.buildMultipleCompositeAnalogies(source,target,5);
+        ArrayList<ArrayList<String>> mappings = compBuilder.buildMultipleCompositeAnalogies(source,target,2);
         mappings.sort(
                 Comparator.comparingDouble(MappingManager::getMappingRichness)
         );

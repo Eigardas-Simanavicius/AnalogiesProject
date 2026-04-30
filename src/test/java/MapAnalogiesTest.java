@@ -1,10 +1,17 @@
+import org.junit.Assert;
 import org.junit.Test;
+import org.main.AnalogyDataHolder;
 import org.main.AnalogyManager;
+import org.main.CompositeBuilder;
 import org.main.Objects.Clause;
 import org.main.MappingManager;
+import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Subject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -87,5 +94,36 @@ public class MapAnalogiesTest {
         Subject key = (Subject) c1.getChildren().get(1);
 
         assertEquals("*subject8", tempMap.get(key).getName());
+    }
+
+    @Test
+    public void rankBestSingleTarget(){
+        AnalogyDataHolder.addAnalogyToHash("(be *Bill sigma)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Bob delta)");
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bob muscle))");
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bill muscle))");
+
+        ArrayList<ArrayList<String>> arr = MappingManager.rankBestAnalogiesSingleTarget("Bill","Bob");
+        assertEquals("[[(Sigma male (exercise.0 *Bill muscle)), (Sigma male (exercise.0 *Bob muscle)), (be *Bill sigma), (be *Bob delta)]]",arr.toString());
+
+    }
+
+    @Test
+    public void rankBestCoalescentMapping(){
+        AnalogyDataHolder.addAnalogyToHash("(be *Bill sigma)");
+        AnalogyDataHolder.addAnalogyToHash("(be *Bob delta)");
+        AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Bob self) (display *Bob self))");
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bob muscle))");
+        AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bill muscle))");
+        MappingManager.createNewCoalesentMapping("Bob","Bill");
+
+        AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Bob self) (display *Bob self))");
+        AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
+        MappingManager.createNewCoalesentMapping("Bob","Adonis");
+
+        ArrayList<CoalescentMapping> mappings =  MappingManager.rankBestCoalesentMapping("Bob");
+        List<Double> richness = ( mappings.stream().map(CoalescentMapping::getRichness)).toList();
+        assertEquals("[2.4464571609137615, 4.277161658802512]",richness.toString());
+
     }
 }
