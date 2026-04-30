@@ -9,6 +9,7 @@ import org.main.Objects.Subject;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.IntStream;
 
 public class MappingManager {
 
@@ -204,9 +205,9 @@ public class MappingManager {
 
 
     private static double getMappingRichness(ArrayList<String> mapping, double beta){
-        return mapping.stream().map(
-                (String x) ->
-                        Math.pow(
+
+        return IntStream.range(0,mapping.size()).filter(s -> (s+1) % 2 == 0).mapToObj(mapping::get).map((String x) ->
+                Math.pow(
                         AnalogyManager.getPredicateRichness(AnalogyManager.ConvertToOOP(x))
                         ,beta
                 )
@@ -221,6 +222,7 @@ public class MappingManager {
         coalesentMappings.get(source).add(curr);
         return curr;
     }
+
 
     public static ArrayList<ArrayList<String>>  rankBestAnalogiesSingleTarget(String source, String target){
         CompositeBuilder compBuilder = new CompositeBuilder();
