@@ -19,11 +19,11 @@ public class InferenceBuilderTest {
     @Test
     public void basicTest(){
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
-        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))");
-        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *barbarian self) ) (then (display *barbarian arm)))");
+        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))");
+        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *Adonis body) ) (then (display *Adonis arm)))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
 
-        ArrayList<String> mapping = new ArrayList<>(Collections.singleton("(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))"));
+        ArrayList<String> mapping = new ArrayList<>(Collections.singleton("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))"));
 
         CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
 
@@ -34,12 +34,12 @@ public class InferenceBuilderTest {
     public void basicTest2(){
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian arm) (display *barbarian arm))");
-        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))");
-        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *barbarian self) ) (then (display *barbarian arm)))");
+        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))");
+        AnalogyDataHolder.addAnalogyToHash("(if (can (train.0 *Adonis body) ) (then (display *Adonis leg)))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis leg) (display *Adonis leg))");
 
-        ArrayList<String> mapping = new ArrayList<>(List.of("(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))","(if (can (train.0 *barbarian self) ) (then (display *barbarian arm)))"));
+        ArrayList<String> mapping = new ArrayList<>(List.of("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))","(if (can (train.0 *Adonis body) ) (then (display *Adonis leg)))"));
 
         CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
 
@@ -54,7 +54,7 @@ public class InferenceBuilderTest {
 
         CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("destruction","AIDS");
 
-        assertEquals(2,InferenceBuilder.getInferredAnalogies(coalescentMapping).size());
+        assertEquals(7,InferenceBuilder.getInferredAnalogies(coalescentMapping).size());
     }
 
     @After

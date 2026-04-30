@@ -9,14 +9,14 @@ public class InferenceBuilder {
 
     public InferenceBuilder(){}
     public static ArrayList<String> getInferredAnalogies(CoalescentMapping mapping){
-        ArrayList<String> targetTopicAnalogies = AnalogyDataHolder.getAnalogiesFor(mapping.getTarget());
+        ArrayList<String> sourceTopicAnalogies = AnalogyDataHolder.getAnalogiesFor(mapping.getSource());
 
-        targetTopicAnalogies = new ArrayList<>(targetTopicAnalogies.stream().filter(x -> !mapping.getCoalescedMapping().containsValue(x)).toList());
+        sourceTopicAnalogies = new ArrayList<>(sourceTopicAnalogies.stream().filter(source -> !mapping.getCoalescedMapping().containsKey(source)).toList());
 
-        return new ArrayList<>(targetTopicAnalogies.stream().filter(x -> canBeInferred(mapping.getInferredMapping(),x)).toList());
+        return new ArrayList<>(sourceTopicAnalogies.stream().filter(source -> canBeInferred(mapping.getInferredMapping(),source)).toList());
     }
 
     private static boolean canBeInferred(HashMap<String,String> inferredMapping, String analogy){
-        return inferredMapping.values().containsAll(AnalogyManager.getUniqueSubjects(analogy));
+        return inferredMapping.keySet().containsAll(AnalogyManager.getUniqueSubjects(analogy));
     }
 }
