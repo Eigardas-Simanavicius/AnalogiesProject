@@ -38,7 +38,6 @@ public class CoalescentMappingGetMappingTest {
         mapping.put("(if (train.0 *Adonis leg) (display *Adonis leg))","(if (train.0 *barbarian arm) (display *barbarian arm))");
 
         CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
-
         assertEquals(mapping,coalescentMapping.getCoalescedMapping());
     }
 
