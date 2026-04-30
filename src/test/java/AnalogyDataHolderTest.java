@@ -46,6 +46,14 @@ public class AnalogyDataHolderTest {
         assertEquals("(if (can (exercise.0 *Adonis muscle)) (can (flex.0 *Adonis muscle)))", structuresHash.get(AnalogyDataHolder.hashPredicate(newAnalogy)).getFirst());
     }
 
+    @Test
+    public void tryReWrite(){
+        testconfig.setRewrite(true);
+        AnalogyDataHolder.addAnalogiesFromFile(testconfig);
+        HashMap<String, ArrayList<String>> analogiesRecieved = AnalogyDataHolder.getAnalogies();
+        System.out.println(analogiesRecieved);
+    }
+
     @After
     public void reset(){
         ConfigSetup.resetConfig();

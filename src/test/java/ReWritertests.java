@@ -25,7 +25,6 @@ public class ReWritertests  {
         rules.add(rule2);
         Clause testClause2 = (Clause)AnalogyManager.ConvertToOOP("(Sigma male (Whopper jr) (exercise.0 athelete muscle) (explode Gregs legs))");
         ArrayList<Predicate> ans = ReWriter.reWriteAnalogyAllPermutations(rules,testClause2);
-        System.out.println(ans.toString());
         assertEquals("(Sigma male(Whopper jr)(by exercising(preform athelete exercise(of muscle)))(by exploding(destroy Gregs explode(of legs))))", ((Clause) (ans.getFirst())).toString());
     }
 

@@ -33,7 +33,8 @@ public class Main {
         }else{
             config = ConfigSetup.applyConfig(args[0]);
         }
-
+            ConfigSetup.resetConfig();
+            config.setRewrite(true);
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         CoalescentMapping mapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");

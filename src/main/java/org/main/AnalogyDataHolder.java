@@ -57,16 +57,9 @@ public class AnalogyDataHolder {
 
             if (config.isRewrite()) {
                 ArrayList<String> rewrites = getRewrites(arr[1], config);
-                if (rewrites.isEmpty()) {
-                    analogies.get(topic).addAll(rewrites);
-
-                    for (String rewrite : rewrites) {
-                        if (structuresHash.containsKey(hashPredicate(rewrite))) {
-                            structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
-                        } else {
-                            structuresHash.put(hashPredicate(rewrite), new ArrayList<String>());
-                            structuresHash.get(hashPredicate(rewrite)).add(rewrite.intern());
-                        }
+                if (!rewrites.isEmpty()) {
+                    for(String reWrite:rewrites){
+                        addAnalogyToHash(reWrite,topic);
                     }
                 }
             }
@@ -109,7 +102,6 @@ public class AnalogyDataHolder {
                 re.add(pred.toString());
             }
         }
-
         return re;
     }
 

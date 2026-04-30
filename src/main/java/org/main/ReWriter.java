@@ -55,10 +55,8 @@ public class ReWriter {
         int[] currCount = new int[targets.size()];
 
         for (int i = 0; i < permutationCount; i++) {
-            if(currCount.length - 1 > 0) {
-                permutations.add(reWriteAnalogy(rulesMap, (Predicate) source.getDeepCopy(), currCount, targets));
-                updatePermutation(currCount, currCount.length - 1, maxCount);
-            }
+            permutations.add(reWriteAnalogy(rulesMap, (Predicate) source.getDeepCopy(), currCount, targets));
+            updatePermutation(currCount, currCount.length - 1, maxCount);
         }
 
 
@@ -121,11 +119,15 @@ public class ReWriter {
     // we will write them in the following way
     // 0,0,0 -> 0,0,1 -> 0,0,2 -> 0,0,3 -> 0,1,0 .. etc etc , this way we create all permutations
     private static void updatePermutation(int[] currCount,int n,int[] maxCount){
-        if(currCount[n] < maxCount[n]){
-            currCount[n]++;
-        }else if(n != 0){
-            currCount[n] = 0;
-            updatePermutation(currCount,n-1,maxCount);
+        if(n >= 0) {
+            if (currCount[n] < maxCount[n]) {
+                currCount[n]++;
+            } else if (n != 0) {
+                currCount[n] = 0;
+                updatePermutation(currCount, n - 1, maxCount);
+            }
+        }else {
+            logger.log(Level.WARNING, "Permutation count failure");
         }
     }
     private static void removeNumbers(Clause source){
