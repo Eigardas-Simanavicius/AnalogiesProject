@@ -1,13 +1,10 @@
 package org.main.Objects;
 
-import org.main.AnalogyManager;
 import org.main.CompositeBuilder;
 import org.main.MappingManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 public class CoalescentMapping {
 
@@ -16,7 +13,7 @@ public class CoalescentMapping {
     private final double richness;
     private ArrayList<String> analogies;
     private HashMap<String,String> coalescedMapping;
-    private HashMap<String, String> inferredMapping;
+    private HashMap<String, String> subjectMapping;
 
     public CoalescentMapping(String source,String target){
         this.source = source;
@@ -48,15 +45,15 @@ public class CoalescentMapping {
         }
     }
 
-    public HashMap<String,String> getInferredMapping(){
-        if(inferredMapping == null){
+    public HashMap<String,String> getSubjectMapping(){
+        if(subjectMapping == null){
             createInferredMapping();
         }
-        return inferredMapping;
+        return subjectMapping;
     }
 
     private void createInferredMapping(){
-        inferredMapping = new HashMap<>();
+        subjectMapping = new HashMap<>();
 
         if(coalescedMapping == null) createCoalescedMapping();
 
@@ -66,7 +63,15 @@ public class CoalescentMapping {
     private void createInferredMappingHelper(String sourceAnalogy, String targetAnalogy){
         HashMap<String,String> map = MappingManager.flatStringMapping(sourceAnalogy,targetAnalogy);
         if(map != null){
-            inferredMapping.putAll(map);
+            subjectMapping.putAll(map);
         }
+    }
+
+    public void setAnalogies(ArrayList<String> analogies){
+        this.analogies = analogies;
+    }
+
+    public void setCoalescedMapping(HashMap<String, String> mapping){
+        this.coalescedMapping = mapping;
     }
 }
