@@ -2,7 +2,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.main.AnalogyDataHolder;
-import org.main.CompositeBuilder;
 import org.main.ConfigSetup;
 import org.main.MappingManager;
 import org.main.Objects.Config;

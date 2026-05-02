@@ -1,12 +1,8 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.main.AnalogyDataHolder;
 import org.main.ConfigSetup;
 import org.main.Objects.Config;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 

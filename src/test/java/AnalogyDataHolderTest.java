@@ -3,16 +3,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.main.AnalogyDataHolder;
 import org.main.ConfigSetup;
-import org.main.MappingManager;
 import org.main.Objects.Config;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AnalogyDataHolderTest {
 

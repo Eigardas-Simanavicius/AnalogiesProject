@@ -9,7 +9,6 @@ import java.security.InvalidParameterException;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class RewriteRulesTest {
 

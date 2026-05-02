@@ -48,7 +48,7 @@ public class ReWriter {
         if(rulesMap.isEmpty()){
             return null;
         }
-        ArrayList<Integer> targets = findPredicatesToChange(source,rulesMap);
+        ArrayList<Integer> targets = findPredicatestoChange(source,rulesMap);
         ArrayList<Predicate> permutations = new ArrayList<>();
         int[] maxCount = createMaxCount(targets,source,rulesMap);
         int permutationCount = getPermutationsCount(maxCount);
@@ -65,7 +65,7 @@ public class ReWriter {
         return permutations;
     }
     // we need to know what predicates inside the analogy the rules will be applied to, since the structure is the same everytime this how we will do it
-    private static ArrayList<Integer> findPredicatesToChange(Predicate head,LinkedHashMap<String,ArrayList<RewriteRule>> rules){
+    private static ArrayList<Integer> findPredicatestoChange(Predicate head,LinkedHashMap<String,ArrayList<RewriteRule>> rules){
         ArrayList<Integer> locations = new ArrayList<Integer>();
         Set<String> keys = rules.keySet();
         ArrayList<Predicate> children = head.getAllChildren();
