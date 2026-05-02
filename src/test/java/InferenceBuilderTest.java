@@ -26,7 +26,7 @@ public class InferenceBuilderTest {
 
         ArrayList<String> mapping = new ArrayList<>(Collections.singleton("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))"));
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
         ArrayList<String> inferenceSources = InferenceBuilder.getInferredAnalogies(coalescentMapping);
         assertEquals(mapping, inferenceSources);
         assertEquals("(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))", InferenceBuilder.getInferredMappings(coalescentMapping).get(inferenceSources.get(0)));
@@ -43,7 +43,7 @@ public class InferenceBuilderTest {
 
         ArrayList<String> mapping = new ArrayList<>(List.of("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))","(if (can (train.0 *Adonis body) ) (then (display *Adonis leg)))"));
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping, InferenceBuilder.getInferredAnalogies(coalescentMapping));
     }
@@ -55,7 +55,7 @@ public class InferenceBuilderTest {
         Config t = ConfigSetup.applyConfig("config.txt");
         AnalogyDataHolder.addAnalogiesFromFile(t);
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("destruction","AIDS");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("destruction","AIDS");
 
         assertEquals(28,InferenceBuilder.getInferredAnalogies(coalescentMapping).size());
     }
@@ -73,7 +73,7 @@ public class InferenceBuilderTest {
 
         mapping.put("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))","(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping, InferenceBuilder.getInferredMappings(coalescentMapping));
     }
@@ -92,7 +92,7 @@ public class InferenceBuilderTest {
         mapping.put("(if (can (train.0 *Adonis body) ) (then (display *Adonis body)))","(if (can (train.0 *barbarian self) ) (then (display *barbarian self)))");
         mapping.put("(if (can (train.0 *Adonis body) ) (then (display *Adonis leg)))","(if (can (train.0 *barbarian self) ) (then (display *barbarian arm)))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping, InferenceBuilder.getInferredMappings(coalescentMapping));
     }
@@ -102,7 +102,7 @@ public class InferenceBuilderTest {
         AnalogyDataHolder.addAnalogyToHash("(can (some priest (lead *congregation)))");
         AnalogyDataHolder.addAnalogyToHash("(can (some ruler (lead *nation)))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("congregation","nation");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("congregation","nation");
 
         assertTrue(InferenceBuilder.getInferredMappings(coalescentMapping).isEmpty());
     }
@@ -116,7 +116,7 @@ public class InferenceBuilderTest {
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis leg) (display *Adonis leg))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
         assertEquals(4,coalescentMapping.getAnalogies().size());
         InferenceBuilder.updateCompositeWithInferences(coalescentMapping);
 
@@ -132,7 +132,7 @@ public class InferenceBuilderTest {
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis leg) (display *Adonis leg))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
         assertEquals(2,coalescentMapping.getCoalescedMapping().size());
         InferenceBuilder.updateCompositeWithInferences(coalescentMapping);
 

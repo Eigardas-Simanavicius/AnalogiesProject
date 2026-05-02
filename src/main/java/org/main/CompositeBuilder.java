@@ -1,6 +1,5 @@
 package org.main;
 
-import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Subject;
 
 import java.util.ArrayList;
@@ -204,7 +203,7 @@ public class CompositeBuilder {
         return total;
     }
 
-    // this will check the new pairList against any exisitng to ones to make sure the new one is unique
+    // this will check the new pairList against any existing to ones to make sure the new one is unique
     private boolean checkIfDuplicate(ArrayList<Pair> mappingPairs,ArrayList<ArrayList<Pair>> possibleDuplicates){
         Comparator<Pair> comparator = new sortPairs();
         mappingPairs.sort(comparator);
@@ -225,7 +224,7 @@ public class CompositeBuilder {
     }
 
 
-    // represent the pair the two analogies mapped together, the numbers representing their location in their respective analogies arralists
+    // represent the pair the two analogies mapped together, the numbers representing their location in their respective analogies arraylists
     private class Pair{
         double richness;
         int target;

@@ -1,7 +1,5 @@
 package org.main.Objects;
 
-import org.main.Interfaces.AnalogicalObject;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.InvalidParameterException;

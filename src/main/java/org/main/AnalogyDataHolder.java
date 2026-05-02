@@ -8,14 +8,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// hold all the analogies, is incharge of parsing and what not
+// hold all the analogies, is in charge of parsing and what not
 public class AnalogyDataHolder {
 
     private static HashMap<String, ArrayList<String>> analogies = new HashMap<>(); //maps topics to analogies about them
@@ -35,7 +32,7 @@ public class AnalogyDataHolder {
     }
 
 
-    // intaking a line, and trying to get something useful out of it
+    // taking in a line, and trying to get something useful out of it
     private static void processLine(String line, Config config) {
 
         String[] arr = line.replace("\t", "  ").split(" {2}");
@@ -93,7 +90,7 @@ public class AnalogyDataHolder {
             structuresHash.get(hashPredicate(analogy)).add(analogy.intern());
         }
     }
-    // incase we need all the rewrites
+    // in case we need all the rewrites
     private static ArrayList<String> getRewrites(String Source, Config config) {
         ArrayList<String> re = new ArrayList<>();
         ArrayList<Predicate> preds = ReWriter.reWriteAnalogyAllPermutations(config.getRuleSet().getRuleForAnalogy(Source), AnalogyManager.ConvertToOOP(Source));

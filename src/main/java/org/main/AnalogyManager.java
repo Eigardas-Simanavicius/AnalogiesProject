@@ -16,7 +16,7 @@ public class AnalogyManager {
         try {
 
             if (!bracketMatch(brackets)) {
-                throw new IllegalArgumentException("Brackets Dont match");
+                throw new IllegalArgumentException("Brackets Don't match");
             }
             String[] currWords;
             Predicate curr = null;
@@ -32,7 +32,7 @@ public class AnalogyManager {
                     count++;
                 } else {
                     if (bracket == ')') { // up the tree
-                        if (curr.getParent() != null) {
+                        if (curr != null && curr.getParent() != null) {
                             curr = curr.getParent();
                         }
                     }

@@ -7,13 +7,11 @@ import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Subject;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.IntStream;
 
 public class MappingManager {
 
-    private static HashMap<String,ArrayList<CoalescentMapping>> coalesentMappings = new HashMap<>();
+    private static HashMap<String,ArrayList<CoalescentMapping>> coalescentMappings = new HashMap<>();
 
     public static Boolean canMap(Predicate head1, Predicate head2){
         if(head1 == null || head2 == null){
@@ -214,12 +212,12 @@ public class MappingManager {
         ).reduce(0.0, Double::sum);
     }
 
-    public static CoalescentMapping createNewCoalesentMapping(String source, String target){
-        if(!coalesentMappings.containsKey(source)){
-            coalesentMappings.put(source,new ArrayList<CoalescentMapping>());
+    public static CoalescentMapping createNewCoalescentMapping(String source, String target){
+        if(!coalescentMappings.containsKey(source)){
+            coalescentMappings.put(source,new ArrayList<CoalescentMapping>());
         }
         CoalescentMapping curr = new CoalescentMapping(source,target);
-        coalesentMappings.get(source).add(curr);
+        coalescentMappings.get(source).add(curr);
         return curr;
     }
 
@@ -233,24 +231,24 @@ public class MappingManager {
         return mappings;
     }
 
-    public static ArrayList<CoalescentMapping> rankBestCoalesentMapping(String source){
-        ArrayList<CoalescentMapping> mappings = coalesentMappings.get(source);
+    public static ArrayList<CoalescentMapping> rankBestCoalescentMapping(String source){
+        ArrayList<CoalescentMapping> mappings = coalescentMappings.get(source);
         mappings.sort(
                 Comparator.comparingDouble(CoalescentMapping::getRichness)
         );
         return mappings;
     }
 
-    public static ArrayList<CoalescentMapping> rankBestCoalesentMappingsOnImprovedRichness(String source){
-        ArrayList<CoalescentMapping> mappings = coalesentMappings.get(source);
+    public static ArrayList<CoalescentMapping> rankBestCoalescentMappingsOnImprovedRichness(String source){
+        ArrayList<CoalescentMapping> mappings = coalescentMappings.get(source);
         mappings.sort(
                 Comparator.comparingDouble(CoalescentMapping::getImprovedRichness)
         );
         return mappings;
     }
 
-    public static HashMap<String,ArrayList<CoalescentMapping>> getCoalesentMappings(){
-        return coalesentMappings;
+    public static HashMap<String,ArrayList<CoalescentMapping>> getCoalescentMappings(){
+        return coalescentMappings;
     }
 
     public static ArrayList<String> getNBestSourcesFor(String targetTopic, int n){
@@ -273,6 +271,6 @@ public class MappingManager {
     }
 
     public static void clearData(){
-        coalesentMappings = new HashMap<>();
+        coalescentMappings = new HashMap<>();
     }
 }

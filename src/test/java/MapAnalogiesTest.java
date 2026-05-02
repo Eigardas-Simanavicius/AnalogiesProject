@@ -1,17 +1,13 @@
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Test;
-import org.main.AnalogyDataHolder;
-import org.main.AnalogyManager;
-import org.main.CompositeBuilder;
+import org.main.*;
 import org.main.Objects.Clause;
-import org.main.MappingManager;
 import org.main.Objects.CoalescentMapping;
 import org.main.Objects.Subject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -87,6 +83,7 @@ public class MapAnalogiesTest {
 
     @Test
     public void multipleSubjectMappingAsterisk(){
+        ConfigSetup.resetConfig();
         Clause c1 = (Clause) AnalogyManager.ConvertToOOP("(p1 subject1 *subject7(p2 subject4))");
         Clause c2 = (Clause)AnalogyManager.ConvertToOOP("(p1 subject2 *subject8(p2 subject3))");
 
@@ -115,15 +112,20 @@ public class MapAnalogiesTest {
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Bob self) (display *Bob self))");
         AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bob muscle))");
         AnalogyDataHolder.addAnalogyToHash("(Sigma male (exercise.0 *Bill muscle))");
-        MappingManager.createNewCoalesentMapping("Bob","Bill");
+        MappingManager.createNewCoalescentMapping("Bob","Bill");
 
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Bob self) (display *Bob self))");
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
-        MappingManager.createNewCoalesentMapping("Bob","Adonis");
+        MappingManager.createNewCoalescentMapping("Bob","Adonis");
 
-        ArrayList<CoalescentMapping> mappings =  MappingManager.rankBestCoalesentMapping("Bob");
+        ArrayList<CoalescentMapping> mappings =  MappingManager.rankBestCoalescentMapping("Bob");
         List<Double> richness = ( mappings.stream().map(CoalescentMapping::getRichness)).toList();
         assertEquals("[2.4464571609137615, 4.277161658802512]",richness.toString());
 
+    }
+
+    @After
+    public void reset(){
+        ConfigSetup.resetConfig();
     }
 }

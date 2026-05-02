@@ -13,7 +13,7 @@ public class CoalescentMapping {
     private final double richness;
     private double improvedRichness;
     private ArrayList<String> analogies;
-    private final ArrayList<String> infferedAnalogies = new ArrayList<>();
+    private final ArrayList<String> inferredAnalogies = new ArrayList<>();
     private HashMap<String,String> coalescedMapping;
     private HashMap<String, String> subjectMapping;
 
@@ -63,15 +63,15 @@ public class CoalescentMapping {
         if(coalescedMapping == null) createCoalescedMapping();
 
         coalescedMapping.forEach(this::createSubjectMappingHelper);
-        improvedRichness = richness + MappingManager.getMappingRichness(infferedAnalogies);
+        improvedRichness = richness + MappingManager.getMappingRichness(inferredAnalogies);
     }
 
     private void createSubjectMappingHelper(String sourceAnalogy, String targetAnalogy){
         HashMap<String,String> map = MappingManager.flatStringMapping(sourceAnalogy,targetAnalogy);
         if(map != null){
             subjectMapping.putAll(map);
-            infferedAnalogies.add(sourceAnalogy);
-            infferedAnalogies.add(targetAnalogy);
+            inferredAnalogies.add(sourceAnalogy);
+            inferredAnalogies.add(targetAnalogy);
             subjectMapping.putAll(map);
         }
     }

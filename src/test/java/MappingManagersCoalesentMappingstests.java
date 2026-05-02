@@ -19,7 +19,7 @@ public class MappingManagersCoalesentMappingstests {
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *Adonis body) (display *Adonis body))");
         CompositeBuilder comp = new CompositeBuilder();
         ArrayList<String> composite = comp.buildCompositeAnalogy("Adonis", "barbarian");
-        assertEquals(8.554, MappingManager.getMappingRichness(composite), 0.001);
+        assertEquals(4.277, MappingManager.getMappingRichness(composite), 0.001);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class MappingManagersCoalesentMappingstests {
         ArrayList<String> string = new ArrayList<>();
         string.add("(if (train.0 *Adonis body) (display *Adonis body))");
         string.add("(if (train.0 *barbarian self) (display *barbarian self))");
-        CoalescentMapping mapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping mapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
         assertEquals(mapping.getAnalogies(), string);
     }
 

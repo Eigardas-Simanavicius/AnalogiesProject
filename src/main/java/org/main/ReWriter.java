@@ -48,7 +48,7 @@ public class ReWriter {
         if(rulesMap.isEmpty()){
             return null;
         }
-        ArrayList<Integer> targets = findPredicatestoChange(source,rulesMap);
+        ArrayList<Integer> targets = findPredicatesToChange(source,rulesMap);
         ArrayList<Predicate> permutations = new ArrayList<>();
         int[] maxCount = createMaxCount(targets,source,rulesMap);
         int permutationCount = getPermutationsCount(maxCount);
@@ -64,8 +64,8 @@ public class ReWriter {
 
         return permutations;
     }
-    // we need to know what predicates inside the analogy the rules will be applied to, since the structure is the same evertime thsis how we will do it
-    private static ArrayList<Integer> findPredicatestoChange(Predicate head,LinkedHashMap<String,ArrayList<RewriteRule>> rules){
+    // we need to know what predicates inside the analogy the rules will be applied to, since the structure is the same everytime this how we will do it
+    private static ArrayList<Integer> findPredicatesToChange(Predicate head,LinkedHashMap<String,ArrayList<RewriteRule>> rules){
         ArrayList<Integer> locations = new ArrayList<Integer>();
         Set<String> keys = rules.keySet();
         ArrayList<Predicate> children = head.getAllChildren();
@@ -100,29 +100,29 @@ public class ReWriter {
     // maps all rules to their respective predicate, only keeping the ones that apply to this predicate
     private static LinkedHashMap<String,ArrayList<RewriteRule>> mapAllRules(ArrayList<RewriteRule> rules, Predicate source){
 
-        LinkedHashMap<String,ArrayList<RewriteRule>> releventRules = new LinkedHashMap<>();
-        ArrayList<String> releventPredicates = new ArrayList<>();
+        LinkedHashMap<String,ArrayList<RewriteRule>> relevantRules = new LinkedHashMap<>();
+        ArrayList<String> relevantPredicates = new ArrayList<>();
         for(Predicate pred: source.getAllChildren()){
-            releventPredicates.add(pred.getName());
+            relevantPredicates.add(pred.getName());
         }
 
         for(RewriteRule r: rules){
-            if(releventPredicates.contains(r.getOriginalPredicate())) {
-                if (!releventRules.containsKey(r.getOriginalPredicate())) {
-                    releventRules.put(r.getOriginalPredicate(), new ArrayList<RewriteRule>());
+            if(relevantPredicates.contains(r.getOriginalPredicate())) {
+                if (!relevantRules.containsKey(r.getOriginalPredicate())) {
+                    relevantRules.put(r.getOriginalPredicate(), new ArrayList<RewriteRule>());
                 }
-                releventRules.get(r.getOriginalPredicate()).add(r);
+                relevantRules.get(r.getOriginalPredicate()).add(r);
             }
         }
-        return releventRules;
+        return relevantRules;
     }
 
 
     // we can iterate through the permutations in a bit of a similar way you'd construct a bit table
-    // but instead of carrying the bit evertime we only do it when we hit maxcount, each value corresponding to one of the rewrite rules from the list
+    // but instead of carrying the bit everytime we only do it when we hit maxcount, each value corresponding to one of the rewrite rules from the list
     // If we have arraylists of size 2,2,3
     // we will write them in the following way
-    // 0,0,0 -> 0,0,1 -> 0,0,2 -> 0,0,3 -> 0,1,0 .. etc etc , this way we create all permutations
+    // 0,0,0 -> 0,0,1 -> 0,0,2 -> 0,0,3 -> 0,1,0 ... etc, etc , this way we create all permutations
     private static void updatePermutation(int[] currCount,int n,int[] maxCount){
         if(n >= 0) {
             if (currCount[n] < maxCount[n]) {

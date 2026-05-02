@@ -55,7 +55,7 @@ public class Clause implements Predicate{
 
             }
             if(hasSubjects){
-                //Assuming that parantheses only need to be closed if the predicate has a subject
+                //Assuming that parentheses only need to be closed if the predicate has a subject
                 if(i != clauseList.size() -1){
                     Predicate next = clauseList.get(i+1);
                     if(next.getParent() != current){

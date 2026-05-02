@@ -6,8 +6,6 @@ import org.main.MappingManager;
 import org.main.Objects.CoalescentMapping;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,7 +18,7 @@ public class CoalescentMappingGetMappingTest {
         HashMap<String,String> mapping = new HashMap<>();
         mapping.put("(if (train.0 *Adonis body) (display *Adonis body))","(if (train.0 *barbarian self) (display *barbarian self))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping,coalescentMapping.getCoalescedMapping());
     }
@@ -37,7 +35,7 @@ public class CoalescentMappingGetMappingTest {
         mapping.put("(if (train.0 *Adonis body) (display *Adonis body))","(if (train.0 *barbarian self) (display *barbarian self))");
         mapping.put("(if (train.0 *Adonis leg) (display *Adonis leg))","(if (train.0 *barbarian arm) (display *barbarian arm))");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
         assertEquals(mapping,coalescentMapping.getCoalescedMapping());
     }
 

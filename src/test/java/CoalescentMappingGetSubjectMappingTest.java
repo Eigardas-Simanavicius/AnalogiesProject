@@ -20,7 +20,7 @@ public class CoalescentMappingGetSubjectMappingTest {
         mapping.put("body","self");
         mapping.put("*Adonis","*barbarian");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping,coalescentMapping.getSubjectMapping());
     }
@@ -39,7 +39,7 @@ public class CoalescentMappingGetSubjectMappingTest {
         mapping.put("leg","arm");
         mapping.put("*Adonis","*barbarian");
 
-        CoalescentMapping coalescentMapping = MappingManager.createNewCoalesentMapping("Adonis","barbarian");
+        CoalescentMapping coalescentMapping = MappingManager.createNewCoalescentMapping("Adonis","barbarian");
 
         assertEquals(mapping,coalescentMapping.getSubjectMapping());
     }
