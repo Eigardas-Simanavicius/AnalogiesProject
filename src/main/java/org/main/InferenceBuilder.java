@@ -50,7 +50,7 @@ public class InferenceBuilder {
         return inferredString.toString();
     }
 
-    public CoalescentMapping updateCompositeWithInferences(CoalescentMapping initialMapping){
+    public static CoalescentMapping updateCompositeWithInferences(CoalescentMapping initialMapping){
         HashMap<String, String> inferences = getInferredMappings(initialMapping);
         ArrayList<String> analogies = initialMapping.getAnalogies();
         HashMap<String, String> mappedAnalogies = initialMapping.getCoalescedMapping();

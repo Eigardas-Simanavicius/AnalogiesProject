@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class CoalescentMappingGetInferredMappingTest {
+public class CoalescentMappingGetSubjectMappingTest {
     @Test
     public void basicTest(){
         AnalogyDataHolder.addAnalogyToHash("(if (train.0 *barbarian self) (display *barbarian self))");
